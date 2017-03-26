@@ -16,12 +16,12 @@ namespace BlobService.Core.Controllers
     public class BlobsController : Controller
     {
         protected IStorageService _storageService;
-        protected IPersistedBlobStore _blobStore;
-        protected IPersistedContainerStore _containerStore;
+        protected IBlobStore _blobStore;
+        protected IContainerStore _containerStore;
 
         public BlobsController(IStorageService storageService,
-            IPersistedBlobStore blobStore,
-            IPersistedContainerStore containerStore)
+            IBlobStore blobStore,
+            IContainerStore containerStore)
         {
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             _blobStore = blobStore ?? throw new ArgumentNullException(nameof(blobStore));

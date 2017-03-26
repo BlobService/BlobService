@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BlobService.Core.Stores
 {
-    public interface IPersistedContainerStore
+    public interface IContainerStore
     {
         Task<IEnumerable<Container>> GetAllAsync();
         Task<Container> GetAsync(string key);

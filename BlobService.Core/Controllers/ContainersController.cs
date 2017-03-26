@@ -11,9 +11,9 @@ namespace BlobService.Core.Controllers
 {
     public class ContainersController : Controller
     {
-        protected IPersistedContainerStore _containerStore;
+        protected IContainerStore _containerStore;
 
-        public ContainersController(IPersistedContainerStore containerStore)
+        public ContainersController(IContainerStore containerStore)
         {
             _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
         }
