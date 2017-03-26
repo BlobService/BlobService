@@ -91,6 +91,8 @@ namespace BlobService.Core.Controllers
 
         [HttpPost]
         [Route("add")]
+        // TODO #1 add uploading by chanks
+        // TODO #2 get rid of Request to make this function testable
         public async Task<IActionResult> Add(string containerId)
         {
             if (Request.Form.Files != null && Request.Form.Files.Count > 0)
