@@ -1,4 +1,6 @@
-﻿using BlobService.Core.Entities;
+﻿using AutoMapper;
+using BlobService.Core.Entities;
+using BlobService.Core.Models;
 using BlobService.Core.Services;
 using BlobService.Core.Stores;
 using Microsoft.AspNetCore.Mvc;
@@ -15,14 +17,17 @@ namespace BlobService.Core.Controllers
 {
     public class BlobsController : Controller
     {
-        protected IStorageService _storageService;
-        protected IBlobStore _blobStore;
-        protected IContainerStore _containerStore;
+        protected readonly IMapper _mapper;
+        protected readonly IStorageService _storageService;
+        protected readonly IBlobStore _blobStore;
+        protected readonly IContainerStore _containerStore;
 
-        public BlobsController(IStorageService storageService,
+        public BlobsController(IMapper mapper,
+            IStorageService storageService,
             IBlobStore blobStore,
             IContainerStore containerStore)
         {
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             _blobStore = blobStore ?? throw new ArgumentNullException(nameof(blobStore));
             _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
@@ -42,7 +47,9 @@ namespace BlobService.Core.Controllers
                 return NotFound();
             }
 
-            return Ok(blob);
+            var blobModel = _mapper.Map<BlobModel>(blob);
+
+            return Ok(blobModel);
         }
 
         [HttpGet]
@@ -122,7 +129,9 @@ namespace BlobService.Core.Controllers
 
                             blob = await _blobStore.AddAsync(blob);
 
-                            return Ok(blob);
+                            var blobModel = _mapper.Map<BlobModel>(blob);
+
+                            return Ok(blobModel);
                         }
                     }
                 }

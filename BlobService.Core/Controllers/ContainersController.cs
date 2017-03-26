@@ -1,4 +1,6 @@
-﻿using BlobService.Core.Entities;
+﻿using AutoMapper;
+using BlobService.Core.Entities;
+using BlobService.Core.Models;
 using BlobService.Core.Services;
 using BlobService.Core.Stores;
 using Microsoft.AspNetCore.Mvc;
@@ -11,18 +13,23 @@ namespace BlobService.Core.Controllers
 {
     public class ContainersController : Controller
     {
+        protected readonly IMapper _mapper;
         protected IContainerStore _containerStore;
 
-        public ContainersController(IContainerStore containerStore)
+        public ContainersController(IMapper mapper,
+            IContainerStore containerStore)
         {
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
         }
 
         [HttpGet]
         [Route("get")]
-        public async Task<IEnumerable<Container>> Get()
+        public async Task<IEnumerable<ContainerModel>> Get()
         {
-            return await _containerStore.GetAllAsync();
+            var containers = await _containerStore.GetAllAsync();
+            var containerModels = _mapper.Map<IEnumerable<Container>, IEnumerable<ContainerModel>>(containers);
+            return containerModels;
         }
 
         [HttpGet]
@@ -34,14 +41,18 @@ namespace BlobService.Core.Controllers
             {
                 return NotFound();
             }
-            return Ok(container);
+
+            var containerModel = _mapper.Map<ContainerModel>(container);
+
+            return Ok(containerModel);
         }
 
         [HttpPost]
         [Route("add")]
-        public async Task<IActionResult> Create([FromBody]Container value)
+        public async Task<IActionResult> Create([FromBody]ContainerModel value)
         {
-            await _containerStore.AddAsync(value);
+            var container = _mapper.Map<Container>(value);
+            await _containerStore.AddAsync(container);
             return Ok();
         }
 
@@ -70,7 +81,9 @@ namespace BlobService.Core.Controllers
                 return NotFound();
             }
 
-            return Ok(blobs);
+            var blobsModel = _mapper.Map<IEnumerable<Blob>,IEnumerable<BlobModel>>(blobs);
+
+            return Ok(blobsModel);
         }
     }
 }
