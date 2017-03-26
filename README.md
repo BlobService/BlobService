@@ -1,0 +1,2 @@
+# BlobService
+BlobService on-permises
