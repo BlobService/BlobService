@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlobService.Core", "BlobService.Core\BlobService.Core.csproj", "{AADC019F-C3E3-4177-88B9-AD2A3D8811A1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlobService.Core.Tests", "BlobService.Core.Tests\BlobService.Core.Tests.csproj", "{D56452C2-617D-4502-8A00-511912A37201}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{AADC019F-C3E3-4177-88B9-AD2A3D8811A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AADC019F-C3E3-4177-88B9-AD2A3D8811A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AADC019F-C3E3-4177-88B9-AD2A3D8811A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D56452C2-617D-4502-8A00-511912A37201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D56452C2-617D-4502-8A00-511912A37201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D56452C2-617D-4502-8A00-511912A37201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D56452C2-617D-4502-8A00-511912A37201}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
