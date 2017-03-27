@@ -86,7 +86,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpPost]
-        [Route("add")]
+        [Route("addBlob")]
         // TODO #1 add uploading by chanks
         // TODO #2 get rid of Request to make this function testable
         public async Task<IActionResult> Add(string containerId)
