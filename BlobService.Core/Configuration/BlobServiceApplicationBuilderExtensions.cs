@@ -23,10 +23,10 @@ namespace BlobService.Core.Configuration
             var storageService = app.ApplicationServices.GetService(typeof(IStorageService));
             if (storageService == null) throw new InvalidOperationException("StorageService isn't registered.");
 
-            var blobStore = app.ApplicationServices.GetService(typeof(IBlobStore));
+            var blobStore = app.ApplicationServices.GetService(typeof(IBlobMetaStore));
             if (blobStore == null) throw new InvalidOperationException("BlobStore isn't registered.");
 
-            var containerStore = app.ApplicationServices.GetService(typeof(IContainerStore));
+            var containerStore = app.ApplicationServices.GetService(typeof(IContainerMetaStore));
             if (containerStore == null) throw new InvalidOperationException("ContainerStore isn't registered.");
         }
     }

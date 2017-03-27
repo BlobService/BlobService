@@ -9,41 +9,41 @@ namespace BlobService.Core.Stores
     /// <summary>
     /// Containers Persited Store Interface
     /// </summary>
-    public interface IContainerStore
+    public interface IContainerMetaStore
     {
         /// <summary>
         /// Gets all containers asynchronous.
         /// </summary>
         /// <returns>Containers</returns>
-        Task<IEnumerable<Container>> GetAllAsync();
+        Task<IEnumerable<ContainerMeta>> GetAllAsync();
 
         /// <summary>
         /// Gets the container by key asynchronous.
         /// </summary>
         /// <param name="key">The container key.</param>
         /// <returns>Container</returns>
-        Task<Container> GetAsync(string key);
+        Task<ContainerMeta> GetAsync(string key);
 
         /// <summary>
         /// Gets the container by name asynchronous.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>Container</returns>
-        Task<Container> GetByNameAsync(string name);
+        Task<ContainerMeta> GetByNameAsync(string name);
 
         /// <summary>
         /// Gets the blobs by container key asynchronous.
         /// </summary>
         /// <param name="containerKey">The container key.</param>
         /// <returns>Blobs of container</returns>
-        Task<IEnumerable<Blob>> GetBlobsAsync(string containerKey);
+        Task<IEnumerable<BlobMeta>> GetBlobsAsync(string containerKey);
 
         /// <summary>
         /// Adds the container asynchronous.
         /// </summary>
         /// <param name="container">The container.</param>
         /// <returns></returns>
-        Task AddAsync(Container container);
+        Task AddAsync(ContainerMeta container);
 
         /// <summary>
         /// Updates the container asynchronous.
@@ -51,7 +51,7 @@ namespace BlobService.Core.Stores
         /// <param name="key">The container key to update.</param>
         /// <param name="container">The container.</param>
         /// <returns></returns>
-        Task UpdateAsync(string key, Container container);
+        Task UpdateAsync(string key, ContainerMeta container);
 
         /// <summary>
         /// Removes the container asynchronous.

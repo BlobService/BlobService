@@ -14,10 +14,10 @@ namespace BlobService.Core.Controllers
     public class ContainersController : Controller
     {
         protected readonly IMapper _mapper;
-        protected IContainerStore _containerStore;
+        protected IContainerMetaStore _containerStore;
 
         public ContainersController(IMapper mapper,
-            IContainerStore containerStore)
+            IContainerMetaStore containerStore)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
@@ -28,7 +28,7 @@ namespace BlobService.Core.Controllers
         public async Task<IEnumerable<ContainerModel>> Get()
         {
             var containers = await _containerStore.GetAllAsync();
-            var containerModels = _mapper.Map<IEnumerable<Container>, IEnumerable<ContainerModel>>(containers);
+            var containerModels = _mapper.Map<IEnumerable<ContainerMeta>, IEnumerable<ContainerModel>>(containers);
             return containerModels;
         }
 
@@ -51,7 +51,7 @@ namespace BlobService.Core.Controllers
         [Route("add")]
         public async Task<IActionResult> Create([FromBody]ContainerModel value)
         {
-            var container = _mapper.Map<Container>(value);
+            var container = _mapper.Map<ContainerMeta>(value);
             await _containerStore.AddAsync(container);
             return Ok();
         }
@@ -81,7 +81,7 @@ namespace BlobService.Core.Controllers
                 return NotFound();
             }
 
-            var blobsModel = _mapper.Map<IEnumerable<Blob>,IEnumerable<BlobModel>>(blobs);
+            var blobsModel = _mapper.Map<IEnumerable<BlobMeta>,IEnumerable<BlobModel>>(blobs);
 
             return Ok(blobsModel);
         }

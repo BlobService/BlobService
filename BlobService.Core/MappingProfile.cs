@@ -11,8 +11,8 @@ namespace BlobService.Core
     {
         public MappingProfile()
         {
-            CreateMap<Container, ContainerModel>().ReverseMap();
-            CreateMap<Blob, BlobModel>().ReverseMap();
+            CreateMap<ContainerMeta, ContainerModel>().ReverseMap();
+            CreateMap<BlobMeta, BlobModel>().ReverseMap();
         }
     }
 }

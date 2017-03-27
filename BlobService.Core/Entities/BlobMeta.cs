@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BlobService.Core.Entities
 {
-    public class Blob
+    public class BlobMeta
     {
         public string Id { get; set; }
         public string ContainerId { get; set; }

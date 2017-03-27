@@ -19,13 +19,13 @@ namespace BlobService.Core.Controllers
     {
         protected readonly IMapper _mapper;
         protected readonly IStorageService _storageService;
-        protected readonly IBlobStore _blobStore;
-        protected readonly IContainerStore _containerStore;
+        protected readonly IBlobMetaStore _blobStore;
+        protected readonly IContainerMetaStore _containerStore;
 
         public BlobsController(IMapper mapper,
             IStorageService storageService,
-            IBlobStore blobStore,
-            IContainerStore containerStore)
+            IBlobMetaStore blobStore,
+            IContainerMetaStore containerStore)
         {
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
@@ -120,7 +120,7 @@ namespace BlobService.Core.Controllers
                         if (!string.IsNullOrEmpty(subject))
                         {
                             string mimeType = MimeMapping.GetMimeMapping(fileName);
-                            var blob = new Blob()
+                            var blob = new BlobMeta()
                             {
                                 ContainerId = containerId,
                                 OrigFileName = fileName,
