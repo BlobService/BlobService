@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers
 {
-    [Route("containers")]
     public class ContainersController : Controller
     {
         protected readonly ILogger _logger;
@@ -27,8 +26,7 @@ namespace BlobService.Core.Controllers
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
-        [HttpGet]
-        [Route("get")]
+        [HttpGet("/containers")]
         public async Task<IEnumerable<ContainerModel>> Get()
         {
             var containersMetas = await _containerMetaStore.GetAllAsync();
@@ -38,8 +36,7 @@ namespace BlobService.Core.Controllers
             return containerModels;
         }
 
-        [HttpGet]
-        [Route("get/{id}")]
+        [HttpGet("/containers/{id}")]
         public async Task<IActionResult> GetById(string id)
         {
             var containerMeta = await _containerMetaStore.GetAsync(id);
@@ -54,8 +51,7 @@ namespace BlobService.Core.Controllers
             return Ok(containerModel);
         }
 
-        [HttpPost]
-        [Route("add")]
+        [HttpPost("/containers")]
         public async Task<IActionResult> Create([FromBody]ContainerModel value)
         {
             var containerMeta = _mapper.Map<ContainerMeta>(value);
@@ -65,8 +61,7 @@ namespace BlobService.Core.Controllers
             return Ok();
         }
 
-        [HttpPut]
-        [Route("update")]
+        [HttpPut("/containers/{id}")]
         public async Task<IActionResult> Update(string id, [FromBody]ContainerModel value)
         {
             var containerMeta = _mapper.Map<ContainerMeta>(value);
@@ -76,8 +71,7 @@ namespace BlobService.Core.Controllers
             return Ok();
         }
 
-        [HttpDelete]
-        [Route("delete/{id}")]
+        [HttpDelete("/containers/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             var containerMeta = _containerMetaStore.GetAsync(id);
@@ -91,8 +85,7 @@ namespace BlobService.Core.Controllers
         }
 
 
-        [HttpGet]
-        [Route("get/{id}/blobs")]
+        [HttpGet("/containers/{id}/blobs")]
         public async Task<IActionResult> ListBlobs(string id)
         {
             var blobsMetas = await _containerMetaStore.GetBlobsAsync(id);

@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers
 {
-    [Route("blobs")]
     public class BlobsController : Controller
     {
         protected readonly ILogger _logger;
@@ -36,8 +35,7 @@ namespace BlobService.Core.Controllers
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
-        [HttpGet]
-        [Route("get/{id}")]
+        [HttpGet("/blobs/{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var blobMeta = await _blobMetaStore.GetAsync(id);
@@ -52,8 +50,7 @@ namespace BlobService.Core.Controllers
             return Ok(blobModel);
         }
 
-        [HttpGet]
-        [Route("download/{id}")]
+        [HttpGet("/blobs/{id}/download")]
         public async Task<HttpResponseMessage> Download(string id)
         {
             var blobMeta = await _blobMetaStore.GetAsync(id);
@@ -86,8 +83,7 @@ namespace BlobService.Core.Controllers
             return result;
         }
 
-        [HttpPost]
-        [Route("add")]
+        [HttpPost("/blobs")]
         // TODO #1 add uploading by chanks
         // TODO #2 get rid of Request to make this function testable
         public async Task<IActionResult> Add(string containerId)
@@ -140,8 +136,7 @@ namespace BlobService.Core.Controllers
             return BadRequest();
         }
 
-        [HttpDelete]
-        [Route("delete/{id}")]
+        [HttpDelete("blobs/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             var blobMeta = await _blobMetaStore.GetAsync(id);
