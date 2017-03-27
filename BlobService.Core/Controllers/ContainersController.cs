@@ -27,7 +27,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IEnumerable<ContainerModel>> GetAllAsync()
+        public async Task<IEnumerable<ContainerModel>> GetAllContainersAsync()
         {
             var containersMetas = await _containerMetaStore.GetAllAsync();
 
@@ -37,7 +37,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpGet("/containers/{id}")]
-        public async Task<IActionResult> GetById(string id)
+        public async Task<IActionResult> GetContainerByIdAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -57,7 +57,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpPost("/containers")]
-        public async Task<IActionResult> Create([FromBody]ContainerModel value)
+        public async Task<IActionResult> AddContainerAsync([FromBody]ContainerModel value)
         {
             if (value == null)
             {
@@ -71,7 +71,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpPut("/containers/{id}")]
-        public async Task<IActionResult> Update(string id, [FromBody]ContainerModel value)
+        public async Task<IActionResult> UpdateContainerAsync(string id, [FromBody]ContainerModel value)
         {
             if (value == null)
             {
@@ -86,7 +86,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpDelete("/containers/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> DeleteContainerAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -105,7 +105,7 @@ namespace BlobService.Core.Controllers
 
 
         [HttpGet("/containers/{id}/blobs")]
-        public async Task<IActionResult> ListBlobs(string id)
+        public async Task<IActionResult> ListBlobsAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
             {

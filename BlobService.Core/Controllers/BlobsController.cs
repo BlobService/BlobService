@@ -37,7 +37,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpGet("/blobs/{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> GetBlobsById(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -57,7 +57,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpGet("/blobs/{id}/download")]
-        public async Task<HttpResponseMessage> Download(string id)
+        public async Task<HttpResponseMessage> DownloadBlobAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -96,7 +96,7 @@ namespace BlobService.Core.Controllers
 
         [HttpPost("/containers/{containerId}/blobs")]
         // TODO add uploading by chunks
-        public async Task<IActionResult> Add(string containerId, IFormFile file)
+        public async Task<IActionResult> AddBlobAsync(string containerId, IFormFile file)
         {
             if (file != null)
             {
@@ -146,7 +146,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpDelete("blobs/{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> DeleteBlobAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
