@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers
 {
+    [Route("blobs")]
     public class BlobsController : Controller
     {
         protected readonly ILogger _logger;
@@ -86,7 +87,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpPost]
-        [Route("addBlob")]
+        [Route("add")]
         // TODO #1 add uploading by chanks
         // TODO #2 get rid of Request to make this function testable
         public async Task<IActionResult> Add(string containerId)

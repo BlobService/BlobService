@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers
 {
+    [Route("containers")]
     public class ContainersController : Controller
     {
         protected readonly ILogger _logger;
@@ -64,6 +65,17 @@ namespace BlobService.Core.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        [Route("update")]
+        public async Task<IActionResult> Update(string id, [FromBody]ContainerModel value)
+        {
+            var containerMeta = _mapper.Map<ContainerMeta>(value);
+
+            await _containerMetaStore.UpdateAsync(id, containerMeta);
+
+            return Ok();
+        }
+
         [HttpDelete]
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete(string id)
@@ -80,8 +92,8 @@ namespace BlobService.Core.Controllers
 
 
         [HttpGet]
-        [Route("{id}/blobs")]
-        public async Task<IActionResult> Blobs(string id)
+        [Route("get/{id}/blobs")]
+        public async Task<IActionResult> ListBlobs(string id)
         {
             var blobsMetas = await _containerMetaStore.GetBlobsAsync(id);
 
