@@ -3,6 +3,7 @@ using BlobService.Core.Entities;
 using BlobService.Core.Models;
 using BlobService.Core.Services;
 using BlobService.Core.Stores;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -38,6 +39,11 @@ namespace BlobService.Core.Controllers
         [HttpGet("/blobs/{id}")]
         public async Task<IActionResult> Get(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
             var blobMeta = await _blobMetaStore.GetAsync(id);
 
             if (blobMeta == null)
@@ -53,6 +59,11 @@ namespace BlobService.Core.Controllers
         [HttpGet("/blobs/{id}/download")]
         public async Task<HttpResponseMessage> Download(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+
             var blobMeta = await _blobMetaStore.GetAsync(id);
 
             if (blobMeta == null)
@@ -83,12 +94,11 @@ namespace BlobService.Core.Controllers
             return result;
         }
 
-        [HttpPost("/blobs")]
-        // TODO #1 add uploading by chanks
-        // TODO #2 get rid of Request to make this function testable
-        public async Task<IActionResult> Add(string containerId)
+        [HttpPost("/containers/{containerId}/blobs")]
+        // TODO add uploading by chunks
+        public async Task<IActionResult> Add(string containerId, IFormFile file)
         {
-            if (Request.Form.Files != null && Request.Form.Files.Count > 0)
+            if (file != null)
             {
                 var containerMeta = await _containerMetaStore.GetAsync(containerId);
 
@@ -97,7 +107,6 @@ namespace BlobService.Core.Controllers
                     return NotFound();
                 }
 
-                var file = Request.Form.Files[0];
                 var contentType = file.ContentType;
 
                 using (var fileStream = file.OpenReadStream())
@@ -139,6 +148,11 @@ namespace BlobService.Core.Controllers
         [HttpDelete("blobs/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
             var blobMeta = await _blobMetaStore.GetAsync(id);
 
             if (blobMeta == null)

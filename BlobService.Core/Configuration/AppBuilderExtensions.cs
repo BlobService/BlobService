@@ -6,7 +6,7 @@ using System;
 
 namespace BlobService.Core.Configuration
 {
-    public static class BlobServiceApplicationBuilderExtensions
+    public static class AppBuilderExtensions
     {
         public static IApplicationBuilder UseBlobService(this IApplicationBuilder app)
         {
@@ -17,7 +17,7 @@ namespace BlobService.Core.Configuration
             return app;
         }
 
-        private static void Validate(this IApplicationBuilder app)
+        internal static void Validate(this IApplicationBuilder app)
         {
             var loggerFactory = app.ApplicationServices.GetService(typeof(ILoggerFactory)) as ILoggerFactory;
             if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));

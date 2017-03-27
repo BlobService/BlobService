@@ -26,8 +26,8 @@ namespace BlobService.Core.Controllers
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
-        [HttpGet("/containers")]
-        public async Task<IEnumerable<ContainerModel>> Get()
+        [HttpGet("")]
+        public async Task<IEnumerable<ContainerModel>> GetAllAsync()
         {
             var containersMetas = await _containerMetaStore.GetAllAsync();
 
@@ -39,6 +39,11 @@ namespace BlobService.Core.Controllers
         [HttpGet("/containers/{id}")]
         public async Task<IActionResult> GetById(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
             var containerMeta = await _containerMetaStore.GetAsync(id);
 
             if (containerMeta == null)
@@ -54,6 +59,10 @@ namespace BlobService.Core.Controllers
         [HttpPost("/containers")]
         public async Task<IActionResult> Create([FromBody]ContainerModel value)
         {
+            if (value == null)
+            {
+                return BadRequest();
+            }
             var containerMeta = _mapper.Map<ContainerMeta>(value);
 
             await _containerMetaStore.AddAsync(containerMeta);
@@ -64,6 +73,11 @@ namespace BlobService.Core.Controllers
         [HttpPut("/containers/{id}")]
         public async Task<IActionResult> Update(string id, [FromBody]ContainerModel value)
         {
+            if (value == null)
+            {
+                return BadRequest();
+            }
+
             var containerMeta = _mapper.Map<ContainerMeta>(value);
 
             await _containerMetaStore.UpdateAsync(id, containerMeta);
@@ -74,6 +88,11 @@ namespace BlobService.Core.Controllers
         [HttpDelete("/containers/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
             var containerMeta = _containerMetaStore.GetAsync(id);
 
             if (containerMeta != null)
@@ -88,6 +107,11 @@ namespace BlobService.Core.Controllers
         [HttpGet("/containers/{id}/blobs")]
         public async Task<IActionResult> ListBlobs(string id)
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
             var blobsMetas = await _containerMetaStore.GetBlobsAsync(id);
 
             if (blobsMetas == null)
