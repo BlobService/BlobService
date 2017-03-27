@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <Description>BlobService.Core component</Description>
   </PropertyGroup>
 
   <ItemGroup>
