@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlobService.Core.Entities
+﻿namespace BlobService.Core.Entities
 {
     public class BlobMeta
     {

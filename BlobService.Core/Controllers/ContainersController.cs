@@ -1,24 +1,26 @@
 ﻿using AutoMapper;
 using BlobService.Core.Entities;
 using BlobService.Core.Models;
-using BlobService.Core.Services;
 using BlobService.Core.Stores;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers
 {
     public class ContainersController : Controller
     {
+        protected readonly ILogger _logger;
         protected readonly IMapper _mapper;
-        protected IContainerMetaStore _containerStore;
+        protected readonly IContainerMetaStore _containerStore;
 
-        public ContainersController(IMapper mapper,
+        public ContainersController(ILogger<ContainersController> logger,
+            IMapper mapper,
             IContainerMetaStore containerStore)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
         }

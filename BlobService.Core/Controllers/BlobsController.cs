@@ -4,29 +4,30 @@ using BlobService.Core.Models;
 using BlobService.Core.Services;
 using BlobService.Core.Stores;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers
 {
     public class BlobsController : Controller
     {
+        protected readonly ILogger _logger;
         protected readonly IMapper _mapper;
         protected readonly IStorageService _storageService;
         protected readonly IBlobMetaStore _blobStore;
         protected readonly IContainerMetaStore _containerStore;
 
-        public BlobsController(IMapper mapper,
+        public BlobsController(ILogger<BlobsController> logger,
+            IMapper mapper,
             IStorageService storageService,
             IBlobMetaStore blobStore,
             IContainerMetaStore containerStore)
         {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             _blobStore = blobStore ?? throw new ArgumentNullException(nameof(blobStore));

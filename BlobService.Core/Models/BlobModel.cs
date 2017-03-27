@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace BlobService.Core.Models
+﻿namespace BlobService.Core.Models
 {
     public class BlobModel
     {
