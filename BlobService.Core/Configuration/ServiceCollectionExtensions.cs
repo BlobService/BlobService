@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BlobService.Core.Filters;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BlobService.Core.Configuration
@@ -7,7 +8,10 @@ namespace BlobService.Core.Configuration
     {
         public static IBlobServiceBuilder AddBlobService(this IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(typeof(AppExceptionFilterAttribute));
+            });
             services.AddAutoMapper(typeof(MappingProfile));
 
             var builder = new BlobServiceBuilder(services);
