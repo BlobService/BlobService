@@ -14,23 +14,26 @@ namespace BlobService.Core.Controllers
     {
         protected readonly ILogger _logger;
         protected readonly IMapper _mapper;
-        protected readonly IContainerMetaStore _containerStore;
+        protected readonly IContainerMetaStore _containerMetaStore;
 
-        public ContainersController(ILogger<ContainersController> logger,
+        public ContainersController(
+            ILogger<ContainersController> logger,
             IMapper mapper,
-            IContainerMetaStore containerStore)
+            IContainerMetaStore containerMetaStore)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
+            _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
         [HttpGet]
         [Route("get")]
         public async Task<IEnumerable<ContainerModel>> Get()
         {
-            var containers = await _containerStore.GetAllAsync();
-            var containerModels = _mapper.Map<IEnumerable<ContainerMeta>, IEnumerable<ContainerModel>>(containers);
+            var containersMetas = await _containerMetaStore.GetAllAsync();
+
+            var containerModels = _mapper.Map<IEnumerable<ContainerMeta>, IEnumerable<ContainerModel>>(containersMetas);
+
             return containerModels;
         }
 
@@ -38,13 +41,14 @@ namespace BlobService.Core.Controllers
         [Route("get/{id}")]
         public async Task<IActionResult> GetById(string id)
         {
-            var container = await _containerStore.GetAsync(id);
-            if (container == null)
+            var containerMeta = await _containerMetaStore.GetAsync(id);
+
+            if (containerMeta == null)
             {
                 return NotFound();
             }
 
-            var containerModel = _mapper.Map<ContainerModel>(container);
+            var containerModel = _mapper.Map<ContainerModel>(containerMeta);
 
             return Ok(containerModel);
         }
@@ -53,8 +57,10 @@ namespace BlobService.Core.Controllers
         [Route("add")]
         public async Task<IActionResult> Create([FromBody]ContainerModel value)
         {
-            var container = _mapper.Map<ContainerMeta>(value);
-            await _containerStore.AddAsync(container);
+            var containerMeta = _mapper.Map<ContainerMeta>(value);
+
+            await _containerMetaStore.AddAsync(containerMeta);
+
             return Ok();
         }
 
@@ -62,10 +68,11 @@ namespace BlobService.Core.Controllers
         [Route("delete/{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var container = _containerStore.GetAsync(id);
-            if (container != null)
+            var containerMeta = _containerMetaStore.GetAsync(id);
+
+            if (containerMeta != null)
             {
-                await _containerStore.RemoveAsync(id);
+                await _containerMetaStore.RemoveAsync(id);
             }
 
             return Ok();
@@ -76,14 +83,14 @@ namespace BlobService.Core.Controllers
         [Route("{id}/blobs")]
         public async Task<IActionResult> Blobs(string id)
         {
-            var blobs = await _containerStore.GetBlobsAsync(id);
+            var blobsMetas = await _containerMetaStore.GetBlobsAsync(id);
 
-            if(blobs == null)
+            if (blobsMetas == null)
             {
                 return NotFound();
             }
 
-            var blobsModel = _mapper.Map<IEnumerable<BlobMeta>,IEnumerable<BlobModel>>(blobs);
+            var blobsModel = _mapper.Map<IEnumerable<BlobMeta>, IEnumerable<BlobModel>>(blobsMetas);
 
             return Ok(blobsModel);
         }
