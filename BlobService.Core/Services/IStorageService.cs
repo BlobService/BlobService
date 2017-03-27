@@ -24,6 +24,14 @@ namespace BlobService.Core.Services
         Task<string> AddBlobAsync(string containerId, byte[] blob);
 
         /// <summary>
+        /// Updates the BLOB asynchronous.
+        /// </summary>
+        /// <param name="containerId">The container identifier.</param>
+        /// <param name="blob">The BLOB.</param>
+        /// <returns>Blob's subject in storage.</returns>
+        Task<string> UpdateBlobAsync(string containerId, string subject, byte[] blob);
+
+        /// <summary>
         /// Deletes the BLOB asynchronous.
         /// </summary>
         /// <param name="containerId">The container identifier.</param>

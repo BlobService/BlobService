@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BlobService.Core.Entities;
+using BlobService.Core.Helpers;
 using BlobService.Core.Models;
 using BlobService.Core.Services;
 using BlobService.Core.Stores;
@@ -98,51 +99,83 @@ namespace BlobService.Core.Controllers
         // TODO add uploading by chunks
         public async Task<IActionResult> AddBlobAsync(string containerId, IFormFile file)
         {
-            if (file != null)
+            if (file == null)
             {
-                var containerMeta = await _containerMetaStore.GetAsync(containerId);
-
-                if (containerMeta == null)
-                {
-                    return NotFound();
-                }
-
-                var contentType = file.ContentType;
-
-                using (var fileStream = file.OpenReadStream())
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await fileStream.CopyToAsync(memoryStream);
-
-                        var fileName = file.FileName;
-                        var buffer = memoryStream.ToArray();
-
-                        var subject = await _storageService.AddBlobAsync(containerId, buffer);
-
-                        if (!string.IsNullOrEmpty(subject))
-                        {
-                            string mimeType = MimeMapping.GetMimeMapping(fileName);
-                            var blobMeta = new BlobMeta()
-                            {
-                                ContainerId = containerId,
-                                OrigFileName = fileName,
-                                MimeType = mimeType,
-                                StorageSubject = subject,
-                                SizeInBytes = buffer.Length
-                            };
-
-                            blobMeta = await _blobMetaStore.AddAsync(blobMeta);
-
-                            var blobModel = _mapper.Map<BlobModel>(blobMeta);
-
-                            return Ok(blobModel);
-                        }
-                    }
-                }
+                return BadRequest();
             }
 
-            return BadRequest();
+            var containerMeta = await _containerMetaStore.GetAsync(containerId);
+
+            if (containerMeta == null)
+            {
+                return NotFound();
+            }
+
+            var contentType = file.ContentType;
+            var fileName = file.FileName;
+            var buffer = await file.ToByteArrayAsync();
+
+            var subject = await _storageService.AddBlobAsync(containerId, buffer);
+
+            if (string.IsNullOrEmpty(subject))
+            {
+                return StatusCode(500);
+            }
+
+            string mimeType = MimeMapping.GetMimeMapping(fileName);
+            var blobMeta = new BlobMeta()
+            {
+                ContainerId = containerId,
+                OrigFileName = fileName,
+                MimeType = mimeType,
+                StorageSubject = subject,
+                SizeInBytes = buffer.Length
+            };
+
+            blobMeta = await _blobMetaStore.AddAsync(blobMeta);
+
+            var blobModel = _mapper.Map<BlobModel>(blobMeta);
+
+            return Ok(blobModel);
+        }
+
+        [HttpPut("/blobs/{blobId}")]
+        // TODO add uploading by chunks
+        public async Task<IActionResult> UpdateBlobAsync(string blobId, IFormFile file)
+        {
+            if (file == null)
+            {
+                return BadRequest();
+            }
+
+            var blobMeta = await _blobMetaStore.GetAsync(blobId);
+
+            if (blobMeta == null)
+            {
+                return NotFound();
+            }
+
+            var contentType = file.ContentType;
+            var fileName = file.FileName;
+            var buffer = await file.ToByteArrayAsync();
+
+            var subject = await _storageService.UpdateBlobAsync(blobMeta.ContainerId, blobMeta.StorageSubject, buffer);
+
+            if (string.IsNullOrEmpty(subject))
+            {
+                return StatusCode(500);
+            }
+
+            blobMeta.MimeType = MimeMapping.GetMimeMapping(fileName);
+            blobMeta.SizeInBytes = buffer.Length;
+            blobMeta.StorageSubject = subject;
+            blobMeta.OrigFileName = fileName;
+
+            await _blobMetaStore.UpdateAsync(blobMeta.Id, blobMeta);
+
+            var blobModel = _mapper.Map<BlobModel>(blobMeta);
+
+            return Ok(blobModel);
         }
 
         [HttpDelete("blobs/{id}")]
