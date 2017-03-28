@@ -17,6 +17,7 @@ namespace BlobService.Core.Controllers
 {
     public class BlobsController : Controller
     {
+        protected readonly BlobServiceOptions _options;
         protected readonly ILogger _logger;
         protected readonly IMapper _mapper;
         protected readonly IStorageService _storageService;
@@ -24,12 +25,14 @@ namespace BlobService.Core.Controllers
         protected readonly IContainerMetaStore _containerMetaStore;
 
         public BlobsController(
+            BlobServiceOptions options,
             ILogger<BlobsController> logger,
             IMapper mapper,
             IStorageService storageService,
             IBlobMetaStore blobMetaStore,
             IContainerMetaStore containerMetaStore)
         {
+            _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
@@ -40,17 +43,11 @@ namespace BlobService.Core.Controllers
         [HttpGet("/blobs/{id}")]
         public async Task<IActionResult> GetBlobsById(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return NotFound();
-            }
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
             var blobMeta = await _blobMetaStore.GetAsync(id);
 
-            if (blobMeta == null)
-            {
-                return NotFound();
-            }
+            if (blobMeta == null) return NotFound();
 
             var blobModel = _mapper.Map<BlobModel>(blobMeta);
 
@@ -60,24 +57,15 @@ namespace BlobService.Core.Controllers
         [HttpGet("/blobs/{id}/download")]
         public async Task<HttpResponseMessage> DownloadBlobAsync(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
-            }
+            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotFound);
 
             var blobMeta = await _blobMetaStore.GetAsync(id);
 
-            if (blobMeta == null)
-            {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
-            }
+            if (blobMeta == null) return new HttpResponseMessage(HttpStatusCode.NotFound);
 
             var blobContent = await _storageService.GetBlobAsync(blobMeta.ContainerId, blobMeta.StorageSubject);
 
-            if (blobContent == null)
-            {
-                return new HttpResponseMessage(HttpStatusCode.NotFound);
-            }
+            if (blobContent == null) return new HttpResponseMessage(HttpStatusCode.NotFound);
 
             var result = new HttpResponseMessage(HttpStatusCode.OK)
             {
@@ -99,28 +87,21 @@ namespace BlobService.Core.Controllers
         // TODO add uploading by chunks
         public async Task<IActionResult> AddBlobAsync(string containerId, IFormFile file)
         {
-            if (file == null)
-            {
-                return BadRequest();
-            }
+            if (file == null) return BadRequest();
 
             var containerMeta = await _containerMetaStore.GetAsync(containerId);
 
-            if (containerMeta == null)
-            {
-                return NotFound();
-            }
+            if (containerMeta == null) return NotFound();
 
+            if (FileLengthExceedAllowed(file)) return BadRequest();
+            
             var contentType = file.ContentType;
             var fileName = file.FileName;
             var buffer = await file.ToByteArrayAsync();
 
             var subject = await _storageService.AddBlobAsync(containerId, buffer);
 
-            if (string.IsNullOrEmpty(subject))
-            {
-                return StatusCode(500);
-            }
+            if (string.IsNullOrEmpty(subject)) return StatusCode(500);
 
             string mimeType = MimeMapping.GetMimeMapping(fileName);
             var blobMeta = new BlobMeta()
@@ -143,17 +124,13 @@ namespace BlobService.Core.Controllers
         // TODO add uploading by chunks
         public async Task<IActionResult> UpdateBlobAsync(string blobId, IFormFile file)
         {
-            if (file == null)
-            {
-                return BadRequest();
-            }
+            if (file == null) return BadRequest();
 
             var blobMeta = await _blobMetaStore.GetAsync(blobId);
 
-            if (blobMeta == null)
-            {
-                return NotFound();
-            }
+            if (blobMeta == null) return NotFound();
+
+            if (FileLengthExceedAllowed(file)) return BadRequest();
 
             var contentType = file.ContentType;
             var fileName = file.FileName;
@@ -161,10 +138,7 @@ namespace BlobService.Core.Controllers
 
             var subject = await _storageService.UpdateBlobAsync(blobMeta.ContainerId, blobMeta.StorageSubject, buffer);
 
-            if (string.IsNullOrEmpty(subject))
-            {
-                return StatusCode(500);
-            }
+            if (string.IsNullOrEmpty(subject)) return StatusCode(500);
 
             blobMeta.MimeType = MimeMapping.GetMimeMapping(fileName);
             blobMeta.SizeInBytes = buffer.Length;
@@ -181,23 +155,27 @@ namespace BlobService.Core.Controllers
         [HttpDelete("blobs/{id}")]
         public async Task<IActionResult> DeleteBlobAsync(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                return NotFound();
-            }
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
             var blobMeta = await _blobMetaStore.GetAsync(id);
 
-            if (blobMeta == null)
-            {
-                return NotFound();
-            }
+            if (blobMeta == null) return NotFound();
 
             await _blobMetaStore.RemoveAsync(id);
 
             await _storageService.DeleteBlobAsync(blobMeta.ContainerId, blobMeta.Id);
 
             return Ok();
+        }
+
+        private bool FileLengthExceedAllowed(IFormFile file)
+        {
+            int fileLengthInMb = (int)(file.Length / 1024 / 1024);
+
+            if (fileLengthInMb > _options.MaxBlobSizeInMB)
+                return true;
+
+            return false;
         }
     }
 }
