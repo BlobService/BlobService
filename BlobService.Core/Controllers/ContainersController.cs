@@ -26,7 +26,7 @@ namespace BlobService.Core.Controllers
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
-        [HttpGet("")]
+        [HttpGet("/containers")]
         public async Task<IEnumerable<ContainerModel>> GetAllContainersAsync()
         {
             var containersMetas = await _containerMetaStore.GetAllAsync();
