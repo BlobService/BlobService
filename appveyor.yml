@@ -1,13 +1,16 @@
-version: 0.1.{build}
+version: 1.0.{build}
 configuration: Release
 platform: Any CPU
 assembly_info:
   patch: true
   assembly_version: '{version}'
   assembly_file_version: '{version}'
+image: Visual Studio 2017
 before_build:
 - cmd: nuget restore
 build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: minimal
+artifacts:
+- path: NuGet/Release/BlobService.Core.*.nupkg
