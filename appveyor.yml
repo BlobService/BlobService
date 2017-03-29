@@ -1,4 +1,4 @@
-version: 0.4.{build}
+version: 0.1.{build}
 configuration: Release
 platform: Any CPU
 assembly_info:
@@ -11,6 +11,3 @@ build:
   publish_nuget: true
   publish_nuget_symbols: true
   verbosity: minimal
-skip_commits:
-  files:
-    - '**/*.md'
