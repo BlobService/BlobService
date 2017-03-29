@@ -3,6 +3,14 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <Description>BlobService.Core component</Description>
+    <Version>0.1.0</Version>
+    <Copyright>Copyright Aram Kocharyan</Copyright>
+    <PackageProjectUrl>https://github.com/BlobService/BlobService</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/BlobService/BlobService/blob/master/LICENSE.md</PackageLicenseUrl>
+    <PackageIconUrl>https://avatars2.githubusercontent.com/u/26712995</PackageIconUrl>
+    <RepositoryUrl>https://github.com/BlobService/BlobService</RepositoryUrl>
+    <PackageTags>blobservice, blobs, files, netcore</PackageTags>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
