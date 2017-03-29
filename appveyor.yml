@@ -1,0 +1,13 @@
+version: 0.4.{build}
+configuration: Release
+platform: Any CPU
+assembly_info:
+  patch: true
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+before_build:
+- cmd: nuget restore
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: minimal
