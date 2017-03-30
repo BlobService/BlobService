@@ -41,7 +41,7 @@ namespace BlobService.Core.Stores
         /// </summary>
         /// <param name="container">The container.</param>
         /// <returns></returns>
-        Task AddAsync(ContainerMeta container);
+        Task<ContainerMeta> AddAsync(ContainerMeta container);
 
         /// <summary>
         /// Updates the container asynchronous.
@@ -49,7 +49,7 @@ namespace BlobService.Core.Stores
         /// <param name="key">The container key to update.</param>
         /// <param name="container">The container.</param>
         /// <returns></returns>
-        Task UpdateAsync(string key, ContainerMeta container);
+        Task<ContainerMeta> UpdateAsync(string key, ContainerMeta container);
 
         /// <summary>
         /// Removes the container asynchronous.
