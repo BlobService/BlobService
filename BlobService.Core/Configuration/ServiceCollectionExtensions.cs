@@ -12,6 +12,8 @@ namespace BlobService.Core.Configuration
 
             setupAction?.Invoke(blobServiceOptions);
 
+            blobServiceOptions.TryValidate();
+
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(AppExceptionFilterAttribute));

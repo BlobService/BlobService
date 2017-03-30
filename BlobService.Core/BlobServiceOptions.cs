@@ -7,5 +7,10 @@ namespace BlobService.Core
     public class BlobServiceOptions
     {
         public int MaxBlobSizeInMB { get; set; } = 50;
+
+        public void TryValidate()
+        {
+
+        }
     }
 }
