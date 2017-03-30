@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BlobService.Core.Entities;
+﻿using BlobService.Core.Entities;
 using BlobService.Core.Models;
 using BlobService.Core.Stores;
 using Microsoft.AspNetCore.Mvc;
@@ -13,16 +12,13 @@ namespace BlobService.Core.Controllers
     public class ContainersController : Controller
     {
         protected readonly ILogger _logger;
-        protected readonly IMapper _mapper;
         protected readonly IContainerMetaStore _containerMetaStore;
 
         public ContainersController(
             ILogger<ContainersController> logger,
-            IMapper mapper,
             IContainerMetaStore containerMetaStore)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
@@ -31,7 +27,7 @@ namespace BlobService.Core.Controllers
         {
             var containersMetas = await _containerMetaStore.GetAllAsync();
 
-            var containerModels = _mapper.Map<IEnumerable<ContainerMeta>, IEnumerable<ContainerModel>>(containersMetas);
+            var containerModels = ModelMapper.ToModelList(containersMetas);
 
             return containerModels;
         }
@@ -45,17 +41,17 @@ namespace BlobService.Core.Controllers
 
             if (containerMeta == null) return NotFound();
 
-            var containerModel = _mapper.Map<ContainerModel>(containerMeta);
+            var containerModel = ModelMapper.ToModel(containerMeta);
 
             return Ok(containerModel);
         }
 
         [HttpPost("/containers")]
-        public async Task<IActionResult> AddContainerAsync([FromBody]ContainerModel value)
+        public async Task<IActionResult> AddContainerAsync([FromBody]ContainerModel model)
         {
-            if (value == null) return BadRequest();
+            if (model == null) return BadRequest();
 
-            var containerMeta = _mapper.Map<ContainerMeta>(value);
+            var containerMeta = ModelMapper.ToEntity(model);
 
             await _containerMetaStore.AddAsync(containerMeta);
 
@@ -63,11 +59,11 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpPut("/containers/{id}")]
-        public async Task<IActionResult> UpdateContainerAsync(string id, [FromBody]ContainerModel value)
+        public async Task<IActionResult> UpdateContainerAsync(string id, [FromBody]ContainerModel model)
         {
-            if (value == null) return BadRequest();
+            if (model == null) return BadRequest();
 
-            var containerMeta = _mapper.Map<ContainerMeta>(value);
+            var containerMeta = ModelMapper.ToEntity(model);
 
             await _containerMetaStore.UpdateAsync(id, containerMeta);
 
@@ -99,7 +95,7 @@ namespace BlobService.Core.Controllers
 
             if (blobsMetas == null) return NotFound();
 
-            var blobsModel = _mapper.Map<IEnumerable<BlobMeta>, IEnumerable<BlobModel>>(blobsMetas);
+            var blobsModel = ModelMapper.ToModelList(blobsMetas);
 
             return Ok(blobsModel);
         }

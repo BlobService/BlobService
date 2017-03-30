@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using BlobService.Core.Entities;
+﻿using BlobService.Core.Entities;
 using BlobService.Core.Helpers;
 using BlobService.Core.Models;
 using BlobService.Core.Services;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,7 +17,6 @@ namespace BlobService.Core.Controllers
     {
         protected readonly BlobServiceOptions _options;
         protected readonly ILogger _logger;
-        protected readonly IMapper _mapper;
         protected readonly IStorageService _storageService;
         protected readonly IBlobMetaStore _blobMetaStore;
         protected readonly IContainerMetaStore _containerMetaStore;
@@ -27,14 +24,12 @@ namespace BlobService.Core.Controllers
         public BlobsController(
             BlobServiceOptions options,
             ILogger<BlobsController> logger,
-            IMapper mapper,
             IStorageService storageService,
             IBlobMetaStore blobMetaStore,
             IContainerMetaStore containerMetaStore)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             _blobMetaStore = blobMetaStore ?? throw new ArgumentNullException(nameof(blobMetaStore));
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
@@ -49,7 +44,7 @@ namespace BlobService.Core.Controllers
 
             if (blobMeta == null) return NotFound();
 
-            var blobModel = _mapper.Map<BlobModel>(blobMeta);
+            var blobModel = ModelMapper.ToModel(blobMeta);
 
             return Ok(blobModel);
         }
@@ -115,7 +110,7 @@ namespace BlobService.Core.Controllers
 
             blobMeta = await _blobMetaStore.AddAsync(blobMeta);
 
-            var blobModel = _mapper.Map<BlobModel>(blobMeta);
+            var blobModel = ModelMapper.ToModel(blobMeta);
 
             return Ok(blobModel);
         }
@@ -147,7 +142,7 @@ namespace BlobService.Core.Controllers
 
             await _blobMetaStore.UpdateAsync(blobMeta.Id, blobMeta);
 
-            var blobModel = _mapper.Map<BlobModel>(blobMeta);
+            var blobModel = ModelMapper.ToModel(blobMeta);
 
             return Ok(blobModel);
         }

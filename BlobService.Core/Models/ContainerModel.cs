@@ -1,4 +1,6 @@
-﻿namespace BlobService.Core.Models
+﻿using BlobService.Core.Entities;
+
+namespace BlobService.Core.Models
 {
     public class ContainerModel
     {

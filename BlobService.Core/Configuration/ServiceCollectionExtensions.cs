@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using BlobService.Core.Filters;
-using Microsoft.AspNetCore.Mvc;
+﻿using BlobService.Core.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -18,8 +16,6 @@ namespace BlobService.Core.Configuration
             {
                 options.Filters.Add(typeof(AppExceptionFilterAttribute));
             });
-
-            services.AddAutoMapper(typeof(MappingProfile));
 
             services.AddSingleton(typeof(BlobServiceOptions), blobServiceOptions);
 
