@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <Description>BlobService.Core component</Description>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
     <Copyright>Copyright Aram Kocharyan</Copyright>
     <PackageProjectUrl>https://github.com/BlobService/BlobService</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/BlobService/BlobService/blob/master/LICENSE.md</PackageLicenseUrl>
