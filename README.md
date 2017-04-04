@@ -24,10 +24,12 @@ public class Startup
         {
             opts.MaxBlobSizeInMB = 100;
         })
+        
         .AddEfMetaStores(opts =>
         {
             opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password = myPassword;"
         })
+        
         .AddFileSystemStorageService(opts =>
         {
             opts.RootPath = @"C:\blobs";
@@ -37,7 +39,6 @@ public class Startup
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
     {
         loggerFactory.AddConsole();
-
         app.UseBlobService();
     }
 }
