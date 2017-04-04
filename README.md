@@ -27,7 +27,7 @@ public class Startup
         
         .AddEfMetaStores(opts =>
         {
-            opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password = myPassword;"
+            opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;"
         })
         
         .AddFileSystemStorageService(opts =>
