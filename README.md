@@ -41,6 +41,7 @@ public class Startup
 
     public void Configure(IApplicationBuilder app)
     {
+        // Use BlobService Middlwares (mvc)
         app.UseBlobService();
     }
 }
