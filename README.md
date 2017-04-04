@@ -15,28 +15,30 @@ Full Documentation is available here.
 
 Sample Usage/Configuration.
 
-    public class Startup
+```c#
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
     {
-        public void ConfigureServices(IServiceCollection services)
+        var builder = services.AddBlobService(opts =>
         {
-            var builder = services.AddBlobService(opts =>
-            {
-                opts.MaxBlobSizeInMB = 100;
-            })
-            .AddEfMetaStores(opts =>
-            {
-                opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password = myPassword;"
-            })
-            .AddFileSystemStorageService(opts =>
-            {
-                opts.RootPath = @"C:\blobs";
-            });
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+            opts.MaxBlobSizeInMB = 100;
+        })
+        .AddEfMetaStores(opts =>
         {
-            loggerFactory.AddConsole();
-
-            app.UseBlobService();
-        }
+            opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password = myPassword;"
+        })
+        .AddFileSystemStorageService(opts =>
+        {
+            opts.RootPath = @"C:\blobs";
+        });
     }
+
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+    {
+        loggerFactory.AddConsole();
+
+        app.UseBlobService();
+    }
+}
+```
