@@ -11,3 +11,32 @@ The project is now in active development.
 Full Documentation is available here.
 
 [http://blobservice.readthedocs.io](http://blobservice.readthedocs.io)
+
+
+Sample Usage/Configuration.
+
+    public class Startup
+    {
+        public void ConfigureServices(IServiceCollection services)
+        {
+            var builder = services.AddBlobService(opts =>
+            {
+                opts.MaxBlobSizeInMB = 100;
+            })
+            .AddEfMetaStores(opts =>
+            {
+                opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password = myPassword;"
+            })
+            .AddFileSystemStorageService(opts =>
+            {
+                opts.RootPath = @"C:\blobs";
+            });
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        {
+            loggerFactory.AddConsole();
+
+            app.UseBlobService();
+        }
+    }
