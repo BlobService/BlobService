@@ -8,5 +8,6 @@
         public int SizeInBytes { get; set; }
         public string MimeType { get; set; }
         public string StorageSubject { get; set; }
+        public ContainerMeta Container { get; set; }
     }
 }
