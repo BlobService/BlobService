@@ -11,3 +11,38 @@ The project is now in active development.
 Full Documentation is available here.
 
 [http://blobservice.readthedocs.io](http://blobservice.readthedocs.io)
+
+
+Sample Usage/Configuration.
+
+```c#
+public class Startup
+{
+    public void ConfigureServices(IServiceCollection services)
+    {
+        // Adds Blob services core services
+        services.AddBlobService(opts =>
+        {
+            opts.MaxBlobSizeInMB = 100;
+        })
+        
+        // Registers EntityFramework stores for persisting blobs,containers metadata
+        .AddEfMetaStores(opts =>
+        {
+            opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;"
+        })
+        
+        // Registers FileSystem Storage Service for persisting files in filesystem in specified path
+        .AddFileSystemStorageService(opts =>
+        {
+            opts.RootPath = @"C:\blobs";
+        });
+    }
+
+    public void Configure(IApplicationBuilder app)
+    {
+        // Use BlobService Middlwares (mvc)
+        app.UseBlobService();
+    }
+}
+```
