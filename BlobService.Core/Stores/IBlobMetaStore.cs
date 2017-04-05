@@ -38,7 +38,7 @@ namespace BlobService.Core.Stores
         /// <param name="key">The key.</param>
         /// <param name="blob">The BLOB.</param>
         /// <returns></returns>
-        Task<TBlobMeta> UpdateAsync(string key, IBlobMeta blob);
+        Task<TBlobMeta> UpdateAsync(string key, TBlobMeta blob);
 
         /// <summary>
         /// Removes the asynchronous.
