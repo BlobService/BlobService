@@ -8,36 +8,34 @@ namespace BlobService.Core.Stores
     /// <summary>
     /// Containers Persited Store Interface
     /// </summary>
-    public interface IContainerMetaStore<TContainerMeta, TBlobMeta> 
-        where TContainerMeta : IContainerMeta
-        where TBlobMeta : IBlobMeta
+    public interface IContainerMetaStore
     {
         /// <summary>
         /// Gets all containers asynchronous.
         /// </summary>
         /// <returns>Containers</returns>
-        Task<IEnumerable<TContainerMeta>> GetAllAsync();
+        Task<IEnumerable<IContainerMeta>> GetAllAsync();
 
         /// <summary>
         /// Gets the container by key asynchronous.
         /// </summary>
         /// <param name="key">The container key.</param>
         /// <returns>Container</returns>
-        Task<TContainerMeta> GetAsync(string key);
+        Task<IContainerMeta> GetAsync(string key);
 
         /// <summary>
         /// Gets the container by name asynchronous.
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>Container</returns>
-        Task<TContainerMeta> GetByNameAsync(string name);
+        Task<IContainerMeta> GetByNameAsync(string name);
 
         /// <summary>
         /// Gets the blobs by container key asynchronous.
         /// </summary>
         /// <param name="containerKey">The container key.</param>
         /// <returns>Blobs of container</returns>
-        Task<IEnumerable<TBlobMeta>> GetBlobsAsync(string containerKey);
+        Task<IEnumerable<IContainerMeta>> GetBlobsAsync(string containerKey);
 
         /// <summary>
         /// Adds the container asynchronous.
@@ -52,7 +50,7 @@ namespace BlobService.Core.Stores
         /// <param name="key">The container key to update.</param>
         /// <param name="container">The container.</param>
         /// <returns></returns>
-        Task<IContainerMeta> UpdateAsync(string key, TContainerMeta container);
+        Task<IContainerMeta> UpdateAsync(string key, IContainerMeta container);
 
         /// <summary>
         /// Removes the container asynchronous.

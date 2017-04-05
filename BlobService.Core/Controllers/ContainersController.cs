@@ -12,11 +12,11 @@ namespace BlobService.Core.Controllers
     public class ContainersController : Controller
     {
         protected readonly ILogger _logger;
-        protected readonly IContainerMetaStore<IContainerMeta, IBlobMeta> _containerMetaStore;
+        protected readonly IContainerMetaStore _containerMetaStore;
 
         public ContainersController(
             ILogger<ContainersController> logger,
-            IContainerMetaStore<IContainerMeta, IBlobMeta> containerMetaStore)
+            IContainerMetaStore containerMetaStore)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
