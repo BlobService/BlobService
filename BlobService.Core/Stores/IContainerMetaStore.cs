@@ -35,7 +35,7 @@ namespace BlobService.Core.Stores
         /// </summary>
         /// <param name="containerKey">The container key.</param>
         /// <returns>Blobs of container</returns>
-        Task<IEnumerable<IContainerMeta>> GetBlobsAsync(string containerKey);
+        Task<IEnumerable<IBlobMeta>> GetBlobsAsync(string containerKey);
 
         /// <summary>
         /// Adds the container asynchronous.
