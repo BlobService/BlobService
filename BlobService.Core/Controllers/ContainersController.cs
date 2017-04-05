@@ -12,11 +12,11 @@ namespace BlobService.Core.Controllers
     public class ContainersController : Controller
     {
         protected readonly ILogger _logger;
-        protected readonly IContainerMetaStore _containerMetaStore;
+        protected readonly IContainerMetaStore<IContainerMeta, IBlobMeta> _containerMetaStore;
 
         public ContainersController(
             ILogger<ContainersController> logger,
-            IContainerMetaStore containerMetaStore)
+            IContainerMetaStore<IContainerMeta, IBlobMeta> containerMetaStore)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
@@ -51,11 +51,14 @@ namespace BlobService.Core.Controllers
         {
             if (model == null) return BadRequest();
 
-            var containerMeta = ModelMapper.ToEntity(model);
+            var containerMeta = await _containerMetaStore.AddAsync(new ContainerCreateModel()
+            {
+                Name = model.Name
+            });
 
-            await _containerMetaStore.AddAsync(containerMeta);
+            var containerModel = ModelMapper.ToModel(containerMeta);
 
-            return Ok();
+            return Ok(containerModel);
         }
 
         [HttpPut("/containers/{id}")]
@@ -63,11 +66,16 @@ namespace BlobService.Core.Controllers
         {
             if (model == null) return BadRequest();
 
-            var containerMeta = ModelMapper.ToEntity(model);
+            var container = await _containerMetaStore.GetAsync(id);
 
-            await _containerMetaStore.UpdateAsync(id, containerMeta);
+            if (container == null) return NotFound();
 
-            return Ok();
+            container.Name = model.Name;
+
+            var containerMeta = await _containerMetaStore.UpdateAsync(id, container);
+            var containerModel = ModelMapper.ToModel(containerMeta);
+
+            return Ok(containerModel);
         }
 
         [HttpDelete("/containers/{id}")]

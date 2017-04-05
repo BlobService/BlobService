@@ -7,16 +7,7 @@ namespace BlobService.Core.Models
 {
     public static class ModelMapper
     {
-        public static ContainerMeta ToEntity(this ContainerModel model)
-        {
-            return new ContainerMeta()
-            {
-                Id = model.Id,
-                Name = model.Name
-            };
-        }
-
-        public static ContainerModel ToModel(this ContainerMeta entity)
+        public static ContainerModel ToModel(this IContainerMeta entity)
         {
             return new ContainerModel()
             {
@@ -25,19 +16,7 @@ namespace BlobService.Core.Models
             };
         }
 
-        public static BlobMeta ToEntity(this BlobModel model)
-        {
-            return new BlobMeta()
-            {
-                Id = model.Id,
-                ContainerId = model.ContainerId,
-                MimeType = model.MimeType,
-                OrigFileName = model.OrigFileName,
-                SizeInBytes = model.SizeInBytes
-            };
-        }
-
-        public static BlobModel ToModel(this BlobMeta entity)
+        public static BlobModel ToModel(this IBlobMeta entity)
         {
             return new BlobModel()
             {
@@ -50,7 +29,7 @@ namespace BlobService.Core.Models
             };
         }
 
-        public static IEnumerable<ContainerModel> ToModelList(this IEnumerable<ContainerMeta> entities)
+        public static IEnumerable<ContainerModel> ToModelList(this IEnumerable<IContainerMeta> entities)
         {
             foreach (var entity in entities)
             {
@@ -58,7 +37,7 @@ namespace BlobService.Core.Models
             }
         }
 
-        public static IEnumerable<BlobModel> ToModelList(this IEnumerable<BlobMeta> entities)
+        public static IEnumerable<BlobModel> ToModelList(this IEnumerable<IBlobMeta> entities)
         {
             foreach (var entity in entities)
             {

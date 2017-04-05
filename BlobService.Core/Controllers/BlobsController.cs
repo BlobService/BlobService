@@ -18,15 +18,15 @@ namespace BlobService.Core.Controllers
         protected readonly BlobServiceOptions _options;
         protected readonly ILogger _logger;
         protected readonly IStorageService _storageService;
-        protected readonly IBlobMetaStore _blobMetaStore;
-        protected readonly IContainerMetaStore _containerMetaStore;
+        protected readonly IBlobMetaStore<IBlobMeta> _blobMetaStore;
+        protected readonly IContainerMetaStore<IContainerMeta, IBlobMeta> _containerMetaStore;
 
         public BlobsController(
             BlobServiceOptions options,
             ILogger<BlobsController> logger,
             IStorageService storageService,
-            IBlobMetaStore blobMetaStore,
-            IContainerMetaStore containerMetaStore)
+            IBlobMetaStore<IBlobMeta> blobMetaStore,
+            IContainerMetaStore<IContainerMeta, IBlobMeta> containerMetaStore)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
@@ -99,16 +99,15 @@ namespace BlobService.Core.Controllers
             if (string.IsNullOrEmpty(subject)) return StatusCode(500);
 
             string mimeType = MimeMapping.GetMimeMapping(fileName);
-            var blobMeta = new BlobMeta()
+
+            var blobMeta = await _blobMetaStore.AddAsync(new BlobCreateModel()
             {
                 ContainerId = containerId,
                 OrigFileName = fileName,
                 MimeType = mimeType,
                 StorageSubject = subject,
                 SizeInBytes = buffer.Length
-            };
-
-            blobMeta = await _blobMetaStore.AddAsync(blobMeta);
+            });
 
             var blobModel = ModelMapper.ToModel(blobMeta);
 

@@ -1,13 +1,16 @@
-﻿namespace BlobService.Core.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace BlobService.Core.Models
 {
-    public class BlobMeta
+    public class BlobCreateModel
     {
-        public string Id { get; set; }
         public string ContainerId { get; set; }
         public string OrigFileName { get; set; }
         public int SizeInBytes { get; set; }
         public string MimeType { get; set; }
         public string StorageSubject { get; set; }
-        public ContainerMeta Container { get; set; }
+        public string DownloadRelativeUrl { get; set; }
     }
 }
