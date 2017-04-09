@@ -27,10 +27,7 @@ public class Startup
         })
         
         // Registers EntityFramework stores for persisting blobs,containers metadata
-        .AddEfMetaStores(opts =>
-        {
-            opts.ConnectionString = "Server=myServerAddress;Database=myDataBase;"
-        })
+        .AddEfMetaStores<BlobServiceContext>()
         
         // Registers FileSystem Storage Service for persisting files in filesystem in specified path
         .AddFileSystemStorageService(opts =>
