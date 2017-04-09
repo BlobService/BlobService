@@ -7,18 +7,18 @@ namespace BlobService.Core.Models
 {
     public static class ModelMapper
     {
-        public static ContainerModel ToModel(this IContainerMeta entity)
+        public static ContainerViewModel ToViewModel(this IContainerMeta entity)
         {
-            return new ContainerModel()
+            return new ContainerViewModel()
             {
                 Id = entity.Id,
                 Name = entity.Name
             };
         }
 
-        public static BlobModel ToModel(this IBlobMeta entity)
+        public static BlobViewModel ToViewModel(this IBlobMeta entity)
         {
-            return new BlobModel()
+            return new BlobViewModel()
             {
                 Id = entity.Id,
                 ContainerId = entity.ContainerId,
@@ -29,19 +29,19 @@ namespace BlobService.Core.Models
             };
         }
 
-        public static IEnumerable<ContainerModel> ToModelList(this IEnumerable<IContainerMeta> entities)
+        public static IEnumerable<ContainerViewModel> ToViewModelList(this IEnumerable<IContainerMeta> entities)
         {
             foreach (var entity in entities)
             {
-                yield return ToModel(entity);
+                yield return ToViewModel(entity);
             }
         }
 
-        public static IEnumerable<BlobModel> ToModelList(this IEnumerable<IBlobMeta> entities)
+        public static IEnumerable<BlobViewModel> ToViewModelList(this IEnumerable<IBlobMeta> entities)
         {
             foreach (var entity in entities)
             {
-                yield return ToModel(entity);
+                yield return ToViewModel(entity);
             }
         }
     }

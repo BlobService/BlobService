@@ -11,23 +11,26 @@ namespace BlobService.Core.Controllers
 {
     public class ContainersController : Controller
     {
+        protected readonly BlobServiceOptions _options;
         protected readonly ILogger _logger;
         protected readonly IContainerMetaStore _containerMetaStore;
 
         public ContainersController(
+            BlobServiceOptions options,
             ILogger<ContainersController> logger,
             IContainerMetaStore containerMetaStore)
         {
+            _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
         [HttpGet("/containers")]
-        public async Task<IEnumerable<ContainerModel>> GetAllContainersAsync()
+        public async Task<IEnumerable<ContainerViewModel>> GetAllContainersAsync()
         {
             var containersMetas = await _containerMetaStore.GetAllAsync();
 
-            var containerModels = ModelMapper.ToModelList(containersMetas);
+            var containerModels = ModelMapper.ToViewModelList(containersMetas);
 
             return containerModels;
         }
@@ -41,28 +44,39 @@ namespace BlobService.Core.Controllers
 
             if (containerMeta == null) return NotFound();
 
-            var containerModel = ModelMapper.ToModel(containerMeta);
+            var containerModel = ModelMapper.ToViewModel(containerMeta);
+
+            return Ok(containerModel);
+        }
+
+        [HttpGet("/containers?name={name}")]
+        public async Task<IActionResult> GetContainerByNameAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return NotFound();
+
+            var containerMeta = await _containerMetaStore.GetByNameAsync(name);
+
+            if (containerMeta == null) return NotFound();
+
+            var containerModel = ModelMapper.ToViewModel(containerMeta);
 
             return Ok(containerModel);
         }
 
         [HttpPost("/containers")]
-        public async Task<IActionResult> AddContainerAsync([FromBody]ContainerModel model)
+        public async Task<IActionResult> AddContainerAsync([FromBody]ContainerCreateModel model)
         {
             if (model == null) return BadRequest();
 
-            var containerMeta = await _containerMetaStore.AddAsync(new ContainerCreateModel()
-            {
-                Name = model.Name
-            });
+            var containerMeta = await _containerMetaStore.AddAsync(model);
 
-            var containerModel = ModelMapper.ToModel(containerMeta);
+            var containerModel = ModelMapper.ToViewModel(containerMeta);
 
             return Ok(containerModel);
         }
 
         [HttpPut("/containers/{id}")]
-        public async Task<IActionResult> UpdateContainerAsync(string id, [FromBody]ContainerModel model)
+        public async Task<IActionResult> UpdateContainerAsync(string id, [FromBody]ContainerCreateModel model)
         {
             if (model == null) return BadRequest();
 
@@ -73,7 +87,7 @@ namespace BlobService.Core.Controllers
             container.Name = model.Name;
 
             var containerMeta = await _containerMetaStore.UpdateAsync(id, container);
-            var containerModel = ModelMapper.ToModel(containerMeta);
+            var containerModel = ModelMapper.ToViewModel(containerMeta);
 
             return Ok(containerModel);
         }
@@ -103,7 +117,7 @@ namespace BlobService.Core.Controllers
 
             if (blobsMetas == null) return NotFound();
 
-            var blobsModel = ModelMapper.ToModelList(blobsMetas);
+            var blobsModel = ModelMapper.ToViewModelList(blobsMetas);
 
             return Ok(blobsModel);
         }

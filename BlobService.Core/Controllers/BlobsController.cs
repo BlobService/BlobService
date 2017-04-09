@@ -36,7 +36,7 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpGet("/blobs/{id}")]
-        public async Task<IActionResult> GetBlobsById(string id)
+        public async Task<IActionResult> GetBlobByIdAsync(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
 
@@ -44,7 +44,7 @@ namespace BlobService.Core.Controllers
 
             if (blobMeta == null) return NotFound();
 
-            var blobModel = ModelMapper.ToModel(blobMeta);
+            var blobModel = ModelMapper.ToViewModel(blobMeta);
 
             return Ok(blobModel);
         }
@@ -109,18 +109,18 @@ namespace BlobService.Core.Controllers
                 SizeInBytes = buffer.Length
             });
 
-            var blobModel = ModelMapper.ToModel(blobMeta);
+            var blobModel = ModelMapper.ToViewModel(blobMeta);
 
             return Ok(blobModel);
         }
 
-        [HttpPut("/blobs/{blobId}")]
+        [HttpPut("/blobs/{id}")]
         // TODO add uploading by chunks
-        public async Task<IActionResult> UpdateBlobAsync(string blobId, IFormFile file)
+        public async Task<IActionResult> UpdateBlobAsync(string id, IFormFile file)
         {
             if (file == null) return BadRequest();
 
-            var blobMeta = await _blobMetaStore.GetAsync(blobId);
+            var blobMeta = await _blobMetaStore.GetAsync(id);
 
             if (blobMeta == null) return NotFound();
 
@@ -141,7 +141,7 @@ namespace BlobService.Core.Controllers
 
             await _blobMetaStore.UpdateAsync(blobMeta.Id, blobMeta);
 
-            var blobModel = ModelMapper.ToModel(blobMeta);
+            var blobModel = ModelMapper.ToViewModel(blobMeta);
 
             return Ok(blobModel);
         }
@@ -162,7 +162,7 @@ namespace BlobService.Core.Controllers
             return Ok();
         }
 
-        private bool FileLengthExceedAllowed(IFormFile file)
+        internal bool FileLengthExceedAllowed(IFormFile file)
         {
             int fileLengthInMb = (int)(file.Length / 1024 / 1024);
 

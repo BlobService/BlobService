@@ -1,6 +1,6 @@
 ﻿namespace BlobService.Core.Models
 {
-    public class BlobModel
+    public class BlobViewModel
     {
         public string Id { get; set; }
         public string ContainerId { get; set; }

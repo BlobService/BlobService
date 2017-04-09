@@ -6,5 +6,6 @@ namespace BlobService.Core
 {
     public class Constants
     {
+        public static int DefaultBlobSizeLimitInMB = 50;
     }
 }
