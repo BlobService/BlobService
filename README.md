@@ -15,6 +15,14 @@ Full Documentation is available here.
 
 Sample Usage/Configuration.
 
+Install following packages:
+
+`Install-Package BlobService.Core`
+
+`Install-Package BlobService.MetaStore.EntityFrameworkCore`
+
+`Install-Package BlobService.Storage.FileSystem`
+
 ```c#
 public class Startup
 {
