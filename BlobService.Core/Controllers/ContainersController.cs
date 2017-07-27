@@ -17,11 +17,11 @@ namespace BlobService.Core.Controllers
 
         public ContainersController(
             BlobServiceOptions options,
-            ILogger<ContainersController> logger,
+            ILoggerFactory loggerFactory,
             IContainerMetaStore containerMetaStore)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = loggerFactory?.CreateLogger<ContainersController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
         }
 
