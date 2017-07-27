@@ -8,6 +8,5 @@
         int SizeInBytes { get; set; }
         string MimeType { get; set; }
         string StorageSubject { get; set; }
-        IContainerMeta Container { get; set; }
     }
 }
