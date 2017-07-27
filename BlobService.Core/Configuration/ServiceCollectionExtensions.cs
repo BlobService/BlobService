@@ -1,5 +1,4 @@
-﻿using BlobService.Core.Filters;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -27,7 +26,6 @@ namespace BlobService.Core.Configuration
                     options.Filters.Add(new AuthorizeFilter(policy));
                 }
 
-                options.Filters.Add(typeof(AppExceptionFilterAttribute));
             });
 
             services.AddSingleton(typeof(BlobServiceOptions), blobServiceOptions);
