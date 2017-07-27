@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
     <Description>BlobService.Core library for hosting blobservice on-permise</Description>
-    <Version>0.2.2</Version>
+    <Version>0.2.5</Version>
     <Copyright>Copyright Aram Kocharyan</Copyright>
     <PackageProjectUrl>https://github.com/BlobService/BlobService</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/BlobService/BlobService/blob/master/LICENSE.md</PackageLicenseUrl>
@@ -12,6 +12,7 @@
     <PackageTags>blobservice, blobs, files, netcore</PackageTags>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Authors>BlobService</Authors>
+    <PackageReleaseNotes>- Added RequireAuthenticatedUser option</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
