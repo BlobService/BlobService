@@ -49,19 +49,19 @@ namespace BlobService.Core.Controllers
             return Ok(containerModel);
         }
 
-        [HttpGet("/containers?name={name}")]
-        public async Task<IActionResult> GetContainerByNameAsync(string name)
-        {
-            if (string.IsNullOrEmpty(name)) return NotFound();
+        //[HttpGet("/containers?name={name}")]
+        //public async Task<IActionResult> GetContainerByNameAsync(string name)
+        //{
+        //    if (string.IsNullOrEmpty(name)) return NotFound();
 
-            var containerMeta = await _containerMetaStore.GetByNameAsync(name);
+        //    var containerMeta = await _containerMetaStore.GetByNameAsync(name);
 
-            if (containerMeta == null) return NotFound();
+        //    if (containerMeta == null) return NotFound();
 
-            var containerModel = ModelMapper.ToViewModel(containerMeta);
+        //    var containerModel = ModelMapper.ToViewModel(containerMeta);
 
-            return Ok(containerModel);
-        }
+        //    return Ok(containerModel);
+        //}
 
         [HttpPost("/containers")]
         public async Task<IActionResult> AddContainerAsync([FromBody]ContainerCreateModel model)
