@@ -7,6 +7,5 @@ namespace BlobService.Core.Entities
     {
         string Id { get; set; }
         string Name { get; set; }
-        ICollection<IBlobMeta> Blobs { get; set; }
     }
 }
