@@ -7,6 +7,7 @@ namespace BlobService.Core
     public class BlobServiceOptions
     {
         public int MaxBlobSizeInMB { get; set; } = Constants.DefaultBlobSizeLimitInMB;
+        public bool RequireAuthenticatedUser { get; set; } = true;
 
         public void TryValidate()
         {

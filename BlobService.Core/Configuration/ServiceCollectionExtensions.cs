@@ -1,4 +1,6 @@
 ﻿using BlobService.Core.Filters;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -16,6 +18,15 @@ namespace BlobService.Core.Configuration
 
             services.AddMvc(options =>
             {
+
+                if (blobServiceOptions.RequireAuthenticatedUser)
+                {
+                    var policy = new AuthorizationPolicyBuilder()
+                        .RequireAuthenticatedUser()
+                        .Build();
+                    options.Filters.Add(new AuthorizeFilter(policy));
+                }
+
                 options.Filters.Add(typeof(AppExceptionFilterAttribute));
             });
 
