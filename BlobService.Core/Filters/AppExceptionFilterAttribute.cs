@@ -11,9 +11,9 @@ namespace BlobService.Core.Filters
     {
         private readonly ILogger _logger;
 
-        public AppExceptionFilterAttribute(ILogger logger)
+        public AppExceptionFilterAttribute(ILoggerFactory loggerFactory)
         {
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = loggerFactory?.CreateLogger<AppExceptionFilterAttribute>() ?? throw new ArgumentNullException(nameof(loggerFactory));
         }
 
         public override void OnException(ExceptionContext context)

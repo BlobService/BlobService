@@ -18,7 +18,7 @@ namespace BlobService.Core.Tests
         {
             _controller = new ContainersController(
                 new BlobServiceOptions(),
-                new ContainersControllerLoggerMock(),
+                new LoggerFactoryMock(),
                 new ContainerMetaStoreMock());
         }
 

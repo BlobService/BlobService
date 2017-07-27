@@ -1,12 +1,11 @@
-﻿using BlobService.Core.Controllers;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BlobService.Core.Tests.Mocks
 {
-    internal class ContainersControllerLoggerMock : ILogger<ContainersController>
+    internal class LoggerMock : ILogger
     {
         public IDisposable BeginScope<TState>(TState state)
         {
@@ -20,6 +19,7 @@ namespace BlobService.Core.Tests.Mocks
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
+
         }
     }
 }

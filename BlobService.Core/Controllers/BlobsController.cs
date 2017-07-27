@@ -16,20 +16,20 @@ namespace BlobService.Core.Controllers
     public class BlobsController : Controller
     {
         protected readonly BlobServiceOptions _options;
-        protected readonly ILogger _logger;
+        protected readonly ILogger<BlobsController> _logger;
         protected readonly IStorageService _storageService;
         protected readonly IBlobMetaStore _blobMetaStore;
         protected readonly IContainerMetaStore _containerMetaStore;
 
         public BlobsController(
             BlobServiceOptions options,
-            ILogger<BlobsController> logger,
+            ILoggerFactory loggerFactory,
             IStorageService storageService,
             IBlobMetaStore blobMetaStore,
             IContainerMetaStore containerMetaStore)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            _logger = loggerFactory?.CreateLogger<BlobsController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
             _blobMetaStore = blobMetaStore ?? throw new ArgumentNullException(nameof(blobMetaStore));
             _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
