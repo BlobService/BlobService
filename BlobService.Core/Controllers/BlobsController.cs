@@ -49,8 +49,8 @@ namespace BlobService.Core.Controllers
             return Ok(blobModel);
         }
 
-        [HttpGet("/blobs/{id}/download")]
-        public async Task<IActionResult> DownloadBlobAsync(string id)
+        [HttpGet("/blobs/{id}/raw")]
+        public async Task<IActionResult> RawBlobAsync(string id)
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
 

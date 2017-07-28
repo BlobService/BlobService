@@ -25,7 +25,7 @@ namespace BlobService.Core.Models
                 MimeType = entity.MimeType,
                 SizeInBytes = entity.SizeInBytes,
                 OrigFileName = entity.OrigFileName,
-                DownloadRelativeUrl = $"/blobs/{entity.Id}/download"
+                DownloadRelativeUrl = $"/blobs/{entity.Id}/raw"
             };
         }
 
