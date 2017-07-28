@@ -1,5 +1,4 @@
-﻿using BlobService.Core.Entities;
-using BlobService.Core.Helpers;
+﻿using BlobService.Core.Helpers;
 using BlobService.Core.Models;
 using BlobService.Core.Services;
 using BlobService.Core.Stores;
@@ -7,8 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Net;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers

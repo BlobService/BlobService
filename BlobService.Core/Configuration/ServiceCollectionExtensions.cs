@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Authorization;
+﻿using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
@@ -17,14 +16,7 @@ namespace BlobService.Core.Configuration
 
             services.AddMvc(options =>
             {
-
-                if (blobServiceOptions.RequireAuthenticatedUser)
-                {
-                    var policy = new AuthorizationPolicyBuilder()
-                        .RequireAuthenticatedUser()
-                        .Build();
-                    options.Filters.Add(new AuthorizeFilter(policy));
-                }
+                options.Filters.Add(new CorsAuthorizationFilterFactory(blobServiceOptions.CorsPolicyName));
 
             });
 

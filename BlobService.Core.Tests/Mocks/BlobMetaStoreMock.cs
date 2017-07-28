@@ -1,7 +1,5 @@
 ﻿using BlobService.Core.Stores;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using BlobService.Core.Entities;
 using BlobService.Core.Models;
 using System.Threading.Tasks;

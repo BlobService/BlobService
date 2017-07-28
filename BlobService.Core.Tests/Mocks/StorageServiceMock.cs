@@ -1,7 +1,4 @@
 ﻿using BlobService.Core.Services;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BlobService.Core.Tests.Mocks

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using Xunit;
 
 namespace BlobService.Core.Tests
@@ -18,6 +16,7 @@ namespace BlobService.Core.Tests
         public void BlobServiceOptionsValidate_ShouldSuccess()
         {
             var options = new BlobServiceOptions();
+            options.CorsPolicyName = "TestPolicy";
             options.TryValidate();
             Assert.True(true);
         }
@@ -27,6 +26,13 @@ namespace BlobService.Core.Tests
         {
             var options = new BlobServiceOptions();
             options.MaxBlobSizeInMB = -1;
+            Assert.Throws<InvalidOperationException>(() => options.TryValidate());
+        }
+
+        [Fact]
+        public void BlobServiceOptionsValidate_CORSPolicyNameCantBeNullOrEmpty_ShouldThrow()
+        {
+            var options = new BlobServiceOptions();
             Assert.Throws<InvalidOperationException>(() => options.TryValidate());
         }
     }

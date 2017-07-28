@@ -27,6 +27,7 @@ namespace BlobService.Core.Configuration
             TestService(app.ApplicationServices, typeof(IStorageService), logger, "No storage mechanism for grants specified.");
             TestService(app.ApplicationServices, typeof(IBlobMetaStore), logger, "No storage mechanism for BlobMeta specified.");
             TestService(app.ApplicationServices, typeof(IContainerMetaStore), logger, "No storage mechanism for ContainerMeta specified.");
+            TestService(app.ApplicationServices, typeof(ISASStore), logger, "No storage mechanism for SAS specified.", false);
 
         }
 
