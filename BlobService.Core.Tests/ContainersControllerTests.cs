@@ -26,35 +26,35 @@ namespace BlobService.Core.Tests
         public async void GetAllContainersAsync_ReturnsOk()
         {
             var result = await _controller.GetAllContainersAsync();
-            Assert.True(result.Count() == TestData.ContainerMetaSeed.Count);
-        }
-
-        [Fact]
-        public async void GetContainerByIdAsync_ReturnsOkAsync()
-        {
-            var result = await _controller.GetContainerByIdAsync(TestData.ContainerMetaSeed.FirstOrDefault().Id);
             Assert.IsType(typeof(OkObjectResult), result);
         }
 
-        [Fact]
-        public async void GetContainerByIdAsync_ReturnsNotFound()
-        {
-            var result = await _controller.GetContainerByIdAsync("not_existing_id");
-            Assert.IsType(typeof(NotFoundResult), result);
-        }
+        //[Fact]
+        //public async void GetContainerByIdAsync_ReturnsOkAsync()
+        //{
+        //    var result = await _controller.GetContainerByIdAsync(TestData.ContainerMetaSeed.FirstOrDefault().Id);
+        //    Assert.IsType(typeof(OkObjectResult), result);
+        //}
+
+        //[Fact]
+        //public async void GetContainerByIdAsync_ReturnsNotFound()
+        //{
+        //    var result = await _controller.GetContainerByIdAsync("not_existing_id");
+        //    Assert.IsType(typeof(NotFoundResult), result);
+        //}
 
         [Fact]
         public async void GetContainerByNameAsync_ReturnsOk()
         {
-            //var result = await _controller.GetContainerByNameAsync(TestData.ContainerMetaSeed.FirstOrDefault().Name);
-            //Assert.IsType(typeof(OkObjectResult), result);
+            var result = await _controller.GetContainerByNameAsync(TestData.ContainerMetaSeed.FirstOrDefault().Name);
+            Assert.IsType(typeof(OkObjectResult), result);
         }
 
         [Fact]
         public async void GetContainerByNameAsync_ReturnsNotFound()
         {
-            //var result = await _controller.GetContainerByNameAsync("not_existing_name");
-            //Assert.IsType(typeof(NotFoundResult), result);
+            var result = await _controller.GetContainerByNameAsync("not_existing_name");
+            Assert.IsType(typeof(NotFoundResult), result);
         }
 
         [Fact]
