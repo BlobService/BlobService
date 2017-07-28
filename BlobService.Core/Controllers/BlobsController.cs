@@ -50,36 +50,24 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpGet("/blobs/{id}/download")]
-        public async Task<HttpResponseMessage> DownloadBlobAsync(string id)
+        public async Task<IActionResult> DownloadBlobAsync(string id)
         {
-            if (string.IsNullOrEmpty(id)) return new HttpResponseMessage(HttpStatusCode.NotFound);
+            if (string.IsNullOrEmpty(id)) return NotFound();
 
             var blobMeta = await _blobMetaStore.GetAsync(id);
 
-            if (blobMeta == null) return new HttpResponseMessage(HttpStatusCode.NotFound);
+            if (blobMeta == null) return NotFound();
 
             var blobContent = await _storageService.GetBlobAsync(blobMeta.ContainerId, blobMeta.StorageSubject);
 
-            if (blobContent == null) return new HttpResponseMessage(HttpStatusCode.NotFound);
+            if (blobContent == null) return NotFound();
 
-            var result = new HttpResponseMessage(HttpStatusCode.OK)
-            {
-                Content = new ByteArrayContent(blobContent)
-            };
-
-            result.Content.Headers.ContentDisposition =
-            new System.Net.Http.Headers.ContentDispositionHeaderValue("attachment")
-            {
-                FileName = blobMeta.OrigFileName
-            };
-
-            result.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(blobMeta.MimeType);
-
-            return result;
+            return File(blobContent, blobMeta.MimeType, blobMeta.OrigFileName);
         }
 
         [HttpPost("/containers/{containerId}/blobs")]
         // TODO add uploading by chunks
+        // TODO refactor 
         public async Task<IActionResult> AddBlobAsync(string containerId, IFormFile file)
         {
             if (file == null) return BadRequest();
@@ -114,8 +102,10 @@ namespace BlobService.Core.Controllers
             return Ok(blobModel);
         }
 
+
         [HttpPut("/blobs/{id}")]
         // TODO add uploading by chunks
+        // TODO refactor 
         public async Task<IActionResult> UpdateBlobAsync(string id, IFormFile file)
         {
             if (file == null) return BadRequest();
