@@ -27,7 +27,7 @@ public class Startup
         })
         
         // Registers EntityFramework stores for persisting blobs,containers metadata
-        .AddEfMetaStores<BlobServiceContext>()
+        .AddEfMetaStores<BlobServiceContext, ContainerMeta, BlobMeta>()
         
         // Registers FileSystem Storage Service for persisting files in filesystem in specified path
         .AddFileSystemStorageService(opts =>
