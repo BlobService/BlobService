@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-
-namespace BlobService.Core.Entities
+﻿namespace BlobService.Core.Entities
 {
     public interface IContainerMeta
     {

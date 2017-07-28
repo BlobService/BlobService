@@ -1,7 +1,4 @@
 ﻿using BlobService.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BlobService.Core.Tests.Entities
 {
