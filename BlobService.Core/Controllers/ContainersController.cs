@@ -26,35 +26,21 @@ namespace BlobService.Core.Controllers
         }
 
         [HttpGet("/containers")]
-        public async Task<IEnumerable<ContainerViewModel>> GetAllContainersAsync()
+        public async Task<IActionResult> GetAllContainersAsync()
         {
             var containersMetas = await _containerMetaStore.GetAllAsync();
 
             var containerModels = ModelMapper.ToViewModelList(containersMetas);
 
-            return containerModels;
+            return Ok(containerModels);
         }
 
-        [HttpGet("/containers/{id}")]
-        public async Task<IActionResult> GetContainerByIdAsync(string id)
-        {
-            if (string.IsNullOrEmpty(id)) return NotFound();
-
-            var containerMeta = await _containerMetaStore.GetAsync(id);
-
-            if (containerMeta == null) return NotFound();
-
-            var containerModel = ModelMapper.ToViewModel(containerMeta);
-
-            return Ok(containerModel);
-        }
-
-        //[HttpGet("/containers?name={name}")]
-        //public async Task<IActionResult> GetContainerByNameAsync(string name)
+        //[HttpGet("/containers/{id}")]
+        //public async Task<IActionResult> GetContainerByIdAsync(string id)
         //{
-        //    if (string.IsNullOrEmpty(name)) return NotFound();
+        //    if (string.IsNullOrEmpty(id)) return NotFound();
 
-        //    var containerMeta = await _containerMetaStore.GetByNameAsync(name);
+        //    var containerMeta = await _containerMetaStore.GetAsync(id);
 
         //    if (containerMeta == null) return NotFound();
 
@@ -62,6 +48,20 @@ namespace BlobService.Core.Controllers
 
         //    return Ok(containerModel);
         //}
+
+        [HttpGet("/containers/{name}")]
+        public async Task<IActionResult> GetContainerByNameAsync(string name)
+        {
+            if (string.IsNullOrEmpty(name)) return NotFound();
+
+            var containerMeta = await _containerMetaStore.GetByNameAsync(name);
+
+            if (containerMeta == null) return NotFound();
+
+            var containerModel = ModelMapper.ToViewModel(containerMeta);
+
+            return Ok(containerModel);
+        }
 
         [HttpPost("/containers")]
         public async Task<IActionResult> AddContainerAsync([FromBody]ContainerCreateModel model)
