@@ -12,21 +12,21 @@ namespace BlobService.Core.Controllers
         protected readonly BlobServiceOptions _options;
         protected readonly ILogger _logger;
         protected readonly ISASStore _sasStore;
-        protected readonly IContainerMetaStore _containerMetaStore;
-        protected readonly IBlobMetaStore _blobMetaStore;
+        protected readonly IContainerStore _containerStore;
+        protected readonly IBlobStore _blobStore;
 
         public SASController(
             BlobServiceOptions options,
             ILoggerFactory loggerFactory,
             ISASStore sasStore,
-            IContainerMetaStore containerMetaStore,
-            IBlobMetaStore blobMetaStore)
+            IContainerStore containerStore,
+            IBlobStore blobStore)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = loggerFactory?.CreateLogger<ContainersController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _sasStore = sasStore ?? throw new ArgumentNullException(nameof(sasStore));
-            _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
-            _blobMetaStore = blobMetaStore ?? throw new ArgumentNullException(nameof(blobMetaStore));
+            _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
+            _blobStore = blobStore ?? throw new ArgumentNullException(nameof(blobStore));
         }
 
 
@@ -47,15 +47,15 @@ namespace BlobService.Core.Controllers
         {
             if (token == null) return BadRequest();
 
-            switch(token.TokenSubject)
+            switch (token.TokenSubject)
             {
                 case SASTokenSubjects.Blob:
-                    var blobMeta = await _blobMetaStore.GetAsync(token.BlobId);
-                    if (blobMeta == null) return NotFound($"SAS subject blob {token.BlobId} not found.");
+                    var blob = await _blobStore.GetByIdAsync(token.BlobId);
+                    if (blob == null) return NotFound($"SAS subject blob {token.BlobId} not found.");
                     break;
                 case SASTokenSubjects.Container:
-                    var containerMeta = await _containerMetaStore.GetAsync(token.ContainerId);
-                    if (containerMeta == null) return NotFound($"SAS subject container {token.ContainerId} not found.");
+                    var container = await _containerStore.GetAsync(token.ContainerId);
+                    if (container == null) return NotFound($"SAS subject container {token.ContainerId} not found.");
                     break;
             }
 

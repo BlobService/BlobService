@@ -1,4 +1,6 @@
-﻿namespace BlobService.Core.Models
+﻿using System.Collections.Generic;
+
+namespace BlobService.Core.Models
 {
     public class BlobViewModel
     {
@@ -8,5 +10,6 @@
         public int SizeInBytes { get; set; }
         public string MimeType { get; set; }
         public string DownloadRelativeUrl { get; set; }
+        public IEnumerable<BlobMetaDataViewModel> MetaData { get; set; }
     }
 }

@@ -21,21 +21,21 @@ namespace BlobService.Core.Security
         protected readonly BlobServiceOptions _options;
         protected readonly ILogger _logger;
         protected readonly ISASStore _sasStore;
-        protected readonly IContainerMetaStore _containerMetaStore;
-        protected readonly IBlobMetaStore _blobMetaStore;
+        protected readonly IContainerStore _containerStore;
+        protected readonly IBlobStore _blobStore;
 
         public ValidateSASTokenFilter(
             BlobServiceOptions options,
             ILoggerFactory loggerFactory,
             ISASStore sasStore,
-            IContainerMetaStore containerMetaStore,
-            IBlobMetaStore blobMetaStore)
+            IContainerStore containerStore,
+            IBlobStore blobStore)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = loggerFactory?.CreateLogger<ValidateSASTokenFilter>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _sasStore = sasStore ?? throw new ArgumentNullException(nameof(sasStore));
-            _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
-            _blobMetaStore = blobMetaStore ?? throw new ArgumentNullException(nameof(blobMetaStore));
+            _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
+            _blobStore = blobStore ?? throw new ArgumentNullException(nameof(blobStore));
         }
 
 

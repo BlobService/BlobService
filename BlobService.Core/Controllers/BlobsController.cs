@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BlobService.Core.Controllers
@@ -15,21 +16,24 @@ namespace BlobService.Core.Controllers
         protected readonly BlobServiceOptions _options;
         protected readonly ILogger<BlobsController> _logger;
         protected readonly IStorageService _storageService;
-        protected readonly IBlobMetaStore _blobMetaStore;
-        protected readonly IContainerMetaStore _containerMetaStore;
+        protected readonly IBlobStore _blobStore;
+        protected readonly IBlobMetaDataStore _blobMetaDataStore;
+        protected readonly IContainerStore _containerStore;
 
         public BlobsController(
             BlobServiceOptions options,
             ILoggerFactory loggerFactory,
             IStorageService storageService,
-            IBlobMetaStore blobMetaStore,
-            IContainerMetaStore containerMetaStore)
+            IBlobStore blobStore,
+            IBlobMetaDataStore blobMetaDataStore,
+            IContainerStore containerStore)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = loggerFactory?.CreateLogger<BlobsController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
-            _blobMetaStore = blobMetaStore ?? throw new ArgumentNullException(nameof(blobMetaStore));
-            _containerMetaStore = containerMetaStore ?? throw new ArgumentNullException(nameof(containerMetaStore));
+            _blobStore = blobStore ?? throw new ArgumentNullException(nameof(blobStore));
+            _blobMetaDataStore = blobMetaDataStore ?? throw new ArgumentNullException(nameof(blobMetaDataStore));
+            _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
         }
 
         [HttpGet("/blobs/{id}")]
@@ -37,11 +41,14 @@ namespace BlobService.Core.Controllers
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
 
-            var blobMeta = await _blobMetaStore.GetAsync(id);
+            var blob = await _blobStore.GetByIdAsync(id);
 
-            if (blobMeta == null) return NotFound();
+            if (blob == null) return NotFound();
 
-            var blobModel = ModelMapper.ToViewModel(blobMeta);
+            var blobMetaData = await _blobMetaDataStore.GetAllFromBlobAsync(blob.Id);
+
+            var blobModel = ModelMapper.ToViewModel(blob);
+            blobModel.MetaData = ModelMapper.ToViewModelList(blobMetaData);
 
             return Ok(blobModel);
         }
@@ -51,30 +58,30 @@ namespace BlobService.Core.Controllers
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
 
-            var blobMeta = await _blobMetaStore.GetAsync(id);
+            var blob = await _blobStore.GetByIdAsync(id);
 
-            if (blobMeta == null) return NotFound();
+            if (blob == null) return NotFound();
 
-            var blobContent = await _storageService.GetBlobAsync(blobMeta.ContainerId, blobMeta.StorageSubject);
+            var blobContent = await _storageService.GetBlobAsync(blob.ContainerId, blob.StorageSubject);
 
             if (blobContent == null) return NotFound();
 
-            return File(blobContent, blobMeta.MimeType, blobMeta.OrigFileName);
+            return File(blobContent, blob.MimeType, blob.OrigFileName);
         }
 
         [HttpPost("/containers/{containerId}/blobs")]
         // TODO add uploading by chunks
         // TODO refactor 
-        public async Task<IActionResult> AddBlobAsync(string containerId, IFormFile file)
+        public async Task<IActionResult> AddBlobAsync(string containerId, List<BlobMetaDataCreateModel> MetaData, IFormFile file)
         {
             if (file == null) return BadRequest();
 
-            var containerMeta = await _containerMetaStore.GetAsync(containerId);
+            var container = await _containerStore.GetAsync(containerId);
 
-            if (containerMeta == null) return NotFound();
+            if (container == null) return NotFound();
 
             if (FileLengthExceedAllowed(file)) return BadRequest();
-            
+
             var contentType = file.ContentType;
             var fileName = file.FileName;
             var buffer = await file.ToByteArrayAsync();
@@ -85,7 +92,7 @@ namespace BlobService.Core.Controllers
 
             string mimeType = MimeMapping.GetMimeMapping(fileName);
 
-            var blobMeta = await _blobMetaStore.AddAsync(new BlobCreateModel()
+            var blob = await _blobStore.AddAsync(new BlobCreateModel()
             {
                 ContainerId = containerId,
                 OrigFileName = fileName,
@@ -94,8 +101,13 @@ namespace BlobService.Core.Controllers
                 SizeInBytes = buffer.Length
             });
 
-            var blobModel = ModelMapper.ToViewModel(blobMeta);
+            foreach (var singleMetaData in MetaData)
+            {
+                await _blobMetaDataStore.AddAsync(blob.Id, singleMetaData);
+            }
 
+            var blobModel = ModelMapper.ToViewModel(blob);
+            blobModel.MetaData = ModelMapper.ToViewModelList(await _blobMetaDataStore.GetAllFromBlobAsync(blob.Id));
             return Ok(blobModel);
         }
 
@@ -107,9 +119,9 @@ namespace BlobService.Core.Controllers
         {
             if (file == null) return BadRequest();
 
-            var blobMeta = await _blobMetaStore.GetAsync(id);
+            var blob = await _blobStore.GetByIdAsync(id);
 
-            if (blobMeta == null) return NotFound();
+            if (blob == null) return NotFound();
 
             if (FileLengthExceedAllowed(file)) return BadRequest();
 
@@ -117,18 +129,18 @@ namespace BlobService.Core.Controllers
             var fileName = file.FileName;
             var buffer = await file.ToByteArrayAsync();
 
-            var subject = await _storageService.UpdateBlobAsync(blobMeta.ContainerId, blobMeta.StorageSubject, buffer);
+            var subject = await _storageService.UpdateBlobAsync(blob.ContainerId, blob.StorageSubject, buffer);
 
             if (string.IsNullOrEmpty(subject)) return StatusCode(500);
 
-            blobMeta.MimeType = MimeMapping.GetMimeMapping(fileName);
-            blobMeta.SizeInBytes = buffer.Length;
-            blobMeta.StorageSubject = subject;
-            blobMeta.OrigFileName = fileName;
+            blob.MimeType = MimeMapping.GetMimeMapping(fileName);
+            blob.SizeInBytes = buffer.Length;
+            blob.StorageSubject = subject;
+            blob.OrigFileName = fileName;
 
-            await _blobMetaStore.UpdateAsync(blobMeta.Id, blobMeta);
+            await _blobStore.UpdateAsync(blob.Id, blob);
 
-            var blobModel = ModelMapper.ToViewModel(blobMeta);
+            var blobModel = ModelMapper.ToViewModel(blob);
 
             return Ok(blobModel);
         }
@@ -138,13 +150,13 @@ namespace BlobService.Core.Controllers
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
 
-            var blobMeta = await _blobMetaStore.GetAsync(id);
+            var blob = await _blobStore.GetByIdAsync(id);
 
-            if (blobMeta == null) return NotFound();
+            if (blob == null) return NotFound();
 
-            await _blobMetaStore.RemoveAsync(id);
+            await _blobStore.RemoveAsync(id);
 
-            await _storageService.DeleteBlobAsync(blobMeta.ContainerId, blobMeta.Id);
+            await _storageService.DeleteBlobAsync(blob.ContainerId, blob.Id);
 
             return Ok();
         }

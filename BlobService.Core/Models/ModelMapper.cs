@@ -5,7 +5,7 @@ namespace BlobService.Core.Models
 {
     public static class ModelMapper
     {
-        public static ContainerViewModel ToViewModel(this IContainerMeta entity)
+        public static ContainerViewModel ToViewModel(this IContainer entity)
         {
             return new ContainerViewModel()
             {
@@ -14,8 +14,10 @@ namespace BlobService.Core.Models
             };
         }
 
-        public static BlobViewModel ToViewModel(this IBlobMeta entity)
+        public static BlobViewModel ToViewModel(this IBlob entity)
         {
+            var metaData = ToViewModelList(entity.MetaData);
+
             return new BlobViewModel()
             {
                 Id = entity.Id,
@@ -23,11 +25,21 @@ namespace BlobService.Core.Models
                 MimeType = entity.MimeType,
                 SizeInBytes = entity.SizeInBytes,
                 OrigFileName = entity.OrigFileName,
-                DownloadRelativeUrl = $"/blobs/{entity.Id}/raw"
+                DownloadRelativeUrl = $"/blobs/{entity.Id}/raw",
+                MetaData = metaData
             };
         }
 
-        public static IEnumerable<ContainerViewModel> ToViewModelList(this IEnumerable<IContainerMeta> entities)
+        public static BlobMetaDataViewModel ToViewModel(this IBlobMetaData entity)
+        {
+            return new BlobMetaDataViewModel()
+            {
+                Key = entity.Key,
+                Value = entity.Value
+            };
+        }
+
+        public static IEnumerable<ContainerViewModel> ToViewModelList(this IEnumerable<IContainer> entities)
         {
             foreach (var entity in entities)
             {
@@ -35,7 +47,15 @@ namespace BlobService.Core.Models
             }
         }
 
-        public static IEnumerable<BlobViewModel> ToViewModelList(this IEnumerable<IBlobMeta> entities)
+        public static IEnumerable<BlobMetaDataViewModel> ToViewModelList(this IEnumerable<IBlobMetaData> entities)
+        {
+            foreach (var entity in entities)
+            {
+                yield return ToViewModel(entity);
+            }
+        }
+
+        public static IEnumerable<BlobViewModel> ToViewModelList(this IEnumerable<IBlob> entities)
         {
             foreach (var entity in entities)
             {

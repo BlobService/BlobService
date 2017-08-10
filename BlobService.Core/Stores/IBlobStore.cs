@@ -8,28 +8,28 @@ namespace BlobService.Core.Stores
     /// <summary>
     /// Blobs Persisted Store Interface
     /// </summary>
-    public interface IBlobMetaStore
+    public interface IBlobStore
     {
         /// <summary>
         /// Gets all asynchronous.
         /// </summary>
         /// <param name="containerId">The container identifier.</param>
         /// <returns></returns>
-        Task<IEnumerable<IBlobMeta>> GetAllAsync(string containerId);
+        Task<IEnumerable<IBlob>> GetAllAsync(string containerId);
 
         /// <summary>
         /// Gets the asynchronous.
         /// </summary>
-        /// <param name="key">The key.</param>
+        /// <param name="id">The key.</param>
         /// <returns></returns>
-        Task<IBlobMeta> GetAsync(string key);
+        Task<IBlob> GetByIdAsync(string id);
 
         /// <summary>
         /// Adds the asynchronous.
         /// </summary>
         /// <param name="blob">The BLOB.</param>
         /// <returns></returns>
-        Task<IBlobMeta> AddAsync(BlobCreateModel blobModel);
+        Task<IBlob> AddAsync(BlobCreateModel blobModel);
 
         /// <summary>
         /// Updates the asynchronous.
@@ -37,7 +37,7 @@ namespace BlobService.Core.Stores
         /// <param name="key">The key.</param>
         /// <param name="blob">The BLOB.</param>
         /// <returns></returns>
-        Task<IBlobMeta> UpdateAsync(string key, IBlobMeta blob);
+        Task<IBlob> UpdateAsync(string key, IBlob blob);
 
         /// <summary>
         /// Removes the asynchronous.

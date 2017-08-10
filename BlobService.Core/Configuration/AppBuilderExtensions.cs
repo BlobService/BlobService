@@ -25,8 +25,8 @@ namespace BlobService.Core.Configuration
             var logger = loggerFactory.CreateLogger("BlobService.Startup");
 
             TestService(app.ApplicationServices, typeof(IStorageService), logger, "No storage mechanism for grants specified.");
-            TestService(app.ApplicationServices, typeof(IBlobMetaStore), logger, "No storage mechanism for BlobMeta specified.");
-            TestService(app.ApplicationServices, typeof(IContainerMetaStore), logger, "No storage mechanism for ContainerMeta specified.");
+            TestService(app.ApplicationServices, typeof(IBlobStore), logger, "No storage mechanism for Blob specified.");
+            TestService(app.ApplicationServices, typeof(IContainerStore), logger, "No storage mechanism for Container specified.");
             TestService(app.ApplicationServices, typeof(ISASStore), logger, "No storage mechanism for SAS specified.", false);
 
         }
