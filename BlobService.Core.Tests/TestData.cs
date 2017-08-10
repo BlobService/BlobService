@@ -8,7 +8,7 @@ namespace BlobService.Core.Tests
     {
         static TestData()
         {
-            BlobMetaSeed.Add(new BlobMetaTest()
+            BlobSeed.Add(new BlobTest()
             {
                 Id = "1",
                 ContainerId = "1",
@@ -18,7 +18,7 @@ namespace BlobService.Core.Tests
                 SizeInBytes = 500
             });
 
-            BlobMetaSeed.Add(new BlobMetaTest()
+            BlobSeed.Add(new BlobTest()
             {
                 Id = "2",
                 ContainerId = "1",
@@ -28,22 +28,22 @@ namespace BlobService.Core.Tests
                 SizeInBytes = 400
             });
 
-            ContainerMetaSeed.Add(new ContainerMetaTest()
+            ContainerSeed.Add(new ContainerTest()
             {
                 Id = "1",
                 Name = "Test"
             });
 
-            ContainerMetaSeed.First().Blobs.Add(BlobMetaSeed.ElementAt(0));
-            ContainerMetaSeed.First().Blobs.Add(BlobMetaSeed.ElementAt(1));
+            ContainerSeed.First().Blobs.Add(BlobSeed.ElementAt(0));
+            ContainerSeed.First().Blobs.Add(BlobSeed.ElementAt(1));
 
-            BlobMetaSeed.ElementAt(0).Container = ContainerMetaSeed.First();
-            BlobMetaSeed.ElementAt(1).Container = ContainerMetaSeed.First();
+            BlobSeed.ElementAt(0).Container = ContainerSeed.First();
+            BlobSeed.ElementAt(1).Container = ContainerSeed.First();
         }
 
-        public static List<BlobMetaTest> BlobMetaSeed = new List<BlobMetaTest>();
-
-        public static List<ContainerMetaTest> ContainerMetaSeed = new List<ContainerMetaTest>();
+        public static List<BlobTest> BlobSeed = new List<BlobTest>();
+        public static List<BlobMetaDataTest> BlobMetaDataSeed = new List<BlobMetaDataTest>();
+        public static List<ContainerTest> ContainerSeed = new List<ContainerTest>();
 
         public static byte[] FileSeed = { 1, 1, 1, 1 };
         public static string Sotragesubject = "TestSubject";

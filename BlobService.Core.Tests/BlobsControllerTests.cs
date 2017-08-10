@@ -16,8 +16,9 @@ namespace BlobService.Core.Tests
                 new BlobServiceOptions(),
                 new LoggerFactoryMock(),
                 new StorageServiceMock(),
-                new BlobMetaStoreMock(),
-                new ContainerMetaStoreMock());
+                new BlobStoreMock(),
+                new BlobMetaDataStoreMock(),
+                new ContainerStoreMock());
         }
 
         [Fact]
@@ -30,7 +31,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void GetBlobByIdAsync_ReturnsOk()
         {
-            var result = await _controller.GetBlobByIdAsync(TestData.BlobMetaSeed.First().Id);
+            var result = await _controller.GetBlobByIdAsync(TestData.BlobSeed.First().Id);
             Assert.IsType(typeof(OkObjectResult), result);
         }
 
@@ -52,7 +53,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void AddBlobAsync_ReturnsBadRequest()
         {
-            var result = await _controller.AddBlobAsync(TestData.ContainerMetaSeed.First().Id, null);
+            var result = await _controller.AddBlobAsync(TestData.ContainerSeed.First().Id, null);
             Assert.IsType(typeof(BadRequestResult), result);
         }
 
@@ -66,25 +67,25 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void AddBlobAsync_ReturnsBadRequestLimitExceed()
         {
-            var result = await _controller.AddBlobAsync(TestData.ContainerMetaSeed.First().Id, new FileMock((Constants.DefaultBlobSizeLimitInMB + 2 ) * 1024 * 1024 ));
+            var result = await _controller.AddBlobAsync(TestData.ContainerSeed.First().Id, new FileMock((Constants.DefaultBlobSizeLimitInMB + 2) * 1024 * 1024));
             Assert.IsType(typeof(BadRequestResult), result);
         }
 
         [Fact]
         public async void AddBlobAsync_ReturnsOk()
         {
-            var result = await _controller.AddBlobAsync(TestData.ContainerMetaSeed.First().Id, new FileMock());
+            var result = await _controller.AddBlobAsync(TestData.ContainerSeed.First().Id, new FileMock());
             Assert.IsType(typeof(OkObjectResult), result);
         }
 
         [Fact]
         public async void AddBlobAsync_ReturnsCorrectData()
         {
-            var result = await _controller.AddBlobAsync(TestData.ContainerMetaSeed.First().Id, new FileMock()) as OkObjectResult;
+            var result = await _controller.AddBlobAsync(TestData.ContainerSeed.First().Id, new FileMock()) as OkObjectResult;
 
             if (result?.Value is BlobViewModel blob)
             {
-                Assert.Equal(blob.ContainerId, TestData.ContainerMetaSeed.First().Id);
+                Assert.Equal(blob.ContainerId, TestData.ContainerSeed.First().Id);
                 Assert.Equal(blob.MimeType, "text/plain");
                 Assert.Equal(blob.SizeInBytes, TestData.FileSeed.Length);
                 Assert.Equal(blob.OrigFileName, "Test.txt");
@@ -99,7 +100,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void UpdateBlobAsync_ReturnsBadRequest()
         {
-            var result = await _controller.UpdateBlobAsync(TestData.BlobMetaSeed.First().Id, null);
+            var result = await _controller.UpdateBlobAsync(TestData.BlobSeed.First().Id, null);
             Assert.IsType(typeof(BadRequestResult), result);
         }
 
@@ -113,14 +114,14 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void UpdateBlobAsync_ReturnsBadRequestLimitExceed()
         {
-            var result = await _controller.UpdateBlobAsync(TestData.BlobMetaSeed.First().Id, new FileMock((Constants.DefaultBlobSizeLimitInMB + 2) * 1024 * 1024));
+            var result = await _controller.UpdateBlobAsync(TestData.BlobSeed.First().Id, new FileMock((Constants.DefaultBlobSizeLimitInMB + 2) * 1024 * 1024));
             Assert.IsType(typeof(BadRequestResult), result);
         }
 
         [Fact]
         public async void UpdateBlobAsync_ReturnsOk()
         {
-            var result = await _controller.UpdateBlobAsync(TestData.BlobMetaSeed.First().Id, new FileMock());
+            var result = await _controller.UpdateBlobAsync(TestData.BlobSeed.First().Id, new FileMock());
             Assert.IsType(typeof(OkObjectResult), result);
         }
 
@@ -134,7 +135,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void DeleteBlobAsync_Ok()
         {
-            var result = await _controller.DeleteBlobAsync(TestData.BlobMetaSeed.First().Id);
+            var result = await _controller.DeleteBlobAsync(TestData.BlobSeed.First().Id);
             Assert.IsType(typeof(OkResult), result);
         }
     }

@@ -36,6 +36,11 @@ namespace BlobService.Core.Controllers
         [HttpGet("/blobs/{id}/metadata")]
         public async Task<IActionResult> GetMetaDataAsync(string id)
         {
+            if (!string.IsNullOrEmpty(id))
+            {
+                return BadRequest();
+            }
+
             var blob = await _blobStore.GetByIdAsync(id);
 
             if (blob == null)
@@ -48,22 +53,61 @@ namespace BlobService.Core.Controllers
             return Ok(metaDataModel);
         }
 
-        [HttpPost("/blobs/{id}/metadata")]
-        public async Task<IActionResult> AddMetaDataAsync(string id, [FromBody]BlobMetaDataCreateModel model)
+        [HttpDelete("/blobs/{blobId}/metadata")]
+        public async Task<IActionResult> DeleteMetaDataAsync(string blobId, string key)
         {
-            if (!ModelState.IsValid)
+            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(blobId))
             {
                 return BadRequest();
             }
 
-            var blob = await _blobStore.GetByIdAsync(id);
+            var blob = await _blobStore.GetByIdAsync(blobId);
 
             if (blob == null)
             {
                 return NotFound();
             }
 
-            var metaData = await _blobMetaDataStore.AddAsync(id, model);
+            await _blobMetaDataStore.DeleteByKeyAsync(blobId, key);
+            return Ok();
+        }
+
+        [HttpPost("/blobs/{blobId}/metadata")]
+        public async Task<IActionResult> SetMetaDataAsync(string blobId, [FromBody]BlobMetaDataCreateModel model)
+        {
+            if (string.IsNullOrEmpty(blobId) || model == null)
+            {
+                return BadRequest();
+            }
+
+            var blob = await _blobStore.GetByIdAsync(blobId);
+
+            if (blob == null)
+            {
+                return NotFound();
+            }
+
+            var metaData = await _blobMetaDataStore.AddAsync(blobId, model);
+
+            return Ok(metaData);
+        }
+
+        [HttpPut("/blobs/{blobId}/metadata")]
+        public async Task<IActionResult> UpdateMetaDataAsync(string blobId, [FromBody]BlobMetaDataCreateModel model)
+        {
+            if (string.IsNullOrEmpty(blobId) || model == null)
+            {
+                return BadRequest();
+            }
+
+            var blob = await _blobStore.GetByIdAsync(blobId);
+
+            if (blob == null)
+            {
+                return NotFound();
+            }
+
+            var metaData = await _blobMetaDataStore.UpdateAsync(blobId, model.Key, model.Value);
 
             return Ok(metaData);
         }

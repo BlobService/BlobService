@@ -1,8 +1,9 @@
 ﻿using BlobService.Core.Entities;
+using System.Collections.Generic;
 
 namespace BlobService.Core.Tests.Entities
 {
-    class BlobMetaTest : IBlobMeta
+    class BlobTest : IBlob
     {
         public string Id { get; set; }
         public string ContainerId { get; set; }
@@ -10,6 +11,7 @@ namespace BlobService.Core.Tests.Entities
         public int SizeInBytes { get; set; }
         public string MimeType { get; set; }
         public string StorageSubject { get; set; }
-        public IContainerMeta Container { get; set; }
+        public IContainer Container { get; set; }
+        public IEnumerable<IBlobMetaData> MetaData { get; }
     }
 }

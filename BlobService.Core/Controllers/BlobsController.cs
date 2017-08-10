@@ -72,7 +72,7 @@ namespace BlobService.Core.Controllers
         [HttpPost("/containers/{containerId}/blobs")]
         // TODO add uploading by chunks
         // TODO refactor 
-        public async Task<IActionResult> AddBlobAsync(string containerId, List<BlobMetaDataCreateModel> MetaData, IFormFile file)
+        public async Task<IActionResult> AddBlobAsync(string containerId, IFormFile file, List<BlobMetaDataCreateModel> MetaData = null)
         {
             if (file == null) return BadRequest();
 
@@ -101,13 +101,18 @@ namespace BlobService.Core.Controllers
                 SizeInBytes = buffer.Length
             });
 
-            foreach (var singleMetaData in MetaData)
+            var blobModel = ModelMapper.ToViewModel(blob);
+
+            if (MetaData != null)
             {
-                await _blobMetaDataStore.AddAsync(blob.Id, singleMetaData);
+                foreach (var singleMetaData in MetaData)
+                {
+                    await _blobMetaDataStore.AddAsync(blob.Id, singleMetaData);
+                }
+
+                blobModel.MetaData = ModelMapper.ToViewModelList(await _blobMetaDataStore.GetAllFromBlobAsync(blob.Id));
             }
 
-            var blobModel = ModelMapper.ToViewModel(blob);
-            blobModel.MetaData = ModelMapper.ToViewModelList(await _blobMetaDataStore.GetAllFromBlobAsync(blob.Id));
             return Ok(blobModel);
         }
 

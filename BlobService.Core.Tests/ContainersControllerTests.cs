@@ -16,7 +16,8 @@ namespace BlobService.Core.Tests
             _controller = new ContainersController(
                 new BlobServiceOptions(),
                 new LoggerFactoryMock(),
-                new ContainerMetaStoreMock());
+                new BlobMetaDataStoreMock(),
+                new ContainerStoreMock());
         }
 
         [Fact]
@@ -43,7 +44,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void GetContainerByNameAsync_ReturnsOk()
         {
-            var result = await _controller.GetContainerByNameAsync(TestData.ContainerMetaSeed.FirstOrDefault().Name);
+            var result = await _controller.GetContainerByNameAsync(TestData.ContainerSeed.FirstOrDefault().Name);
             Assert.IsType(typeof(OkObjectResult), result);
         }
 
@@ -71,7 +72,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void UpdateContainerAsync_BadRequest()
         {
-            var result = await _controller.UpdateContainerAsync(TestData.ContainerMetaSeed.FirstOrDefault().Id, null);
+            var result = await _controller.UpdateContainerAsync(TestData.ContainerSeed.FirstOrDefault().Id, null);
             Assert.IsType(typeof(BadRequestResult), result);
         }
 
@@ -85,14 +86,14 @@ namespace BlobService.Core.Tests
         [Fact]
         public async Task UpdateContainerAsync_OkAsync()
         {
-            var result = await _controller.UpdateContainerAsync(TestData.ContainerMetaSeed.FirstOrDefault().Id, new ContainerCreateModel() { Name = "test" });
+            var result = await _controller.UpdateContainerAsync(TestData.ContainerSeed.FirstOrDefault().Id, new ContainerCreateModel() { Name = "test" });
             Assert.IsType(typeof(OkObjectResult), result);
         }
 
         [Fact]
         public async Task DeleteContainerAsync_OkAsync()
         {
-            var result = await _controller.DeleteContainerAsync(TestData.ContainerMetaSeed.FirstOrDefault().Id);
+            var result = await _controller.DeleteContainerAsync(TestData.ContainerSeed.FirstOrDefault().Id);
             Assert.IsType(typeof(OkResult), result);
         }
 
@@ -106,7 +107,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void ListBlobsAsync_Ok()
         {
-            var result = await _controller.ListBlobsAsync(TestData.ContainerMetaSeed.FirstOrDefault().Id);
+            var result = await _controller.ListBlobsAsync(TestData.ContainerSeed.FirstOrDefault().Id);
             Assert.IsType(typeof(OkObjectResult), result);
         }
     }
