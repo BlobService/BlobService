@@ -161,7 +161,7 @@ namespace BlobService.Core.Controllers
 
             await _blobStore.RemoveAsync(id);
 
-            await _storageService.DeleteBlobAsync(blob.ContainerId, blob.Id);
+            await _storageService.DeleteBlobAsync(blob.ContainerId, blob.StorageSubject);
 
             return Ok();
         }
