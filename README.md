@@ -13,15 +13,17 @@ Full Documentation is available here.
 [http://blobservice.readthedocs.io](http://blobservice.readthedocs.io)
 
 
-#### Sample Usage/Configuration.
-install folowing Nuget packages
+### Configuration.
+1) Create new ASP.NET Core project in you solution
+
+2) Install folowing Nuget packages
 ```
 Install-Package BlobService.Core
 Install-Package BlobService.MetaStore.EntityFrameworkCore
 Install-Package BlobService.Storage.FileSystem
 ```
 
-Add folowing code to your Startup.cs
+3) Add folowing code to your Startup.cs
 
 ```c#
 //Usings
@@ -81,3 +83,15 @@ public class Startup
     }
 }
 ```
+4) Execute folowing command in Console
+```
+Add-Migrations
+```
+and specify name for your migration
+
+5) And finally execute 
+```
+Update-Database
+```
+
+### Usage.
