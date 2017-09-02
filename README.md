@@ -102,7 +102,6 @@ Update-Database
 ```
 Method: GET
 Endpoint: www.example.com/containers
-Return Data Sample: [{"name" : "ContainerName" , "id" : "6ffa7213-7958-460c-b6f1-70d019b32356"}]
 ```
 
 2) Add container
@@ -110,14 +109,29 @@ Return Data Sample: [{"name" : "ContainerName" , "id" : "6ffa7213-7958-460c-b6f1
 Method: POST
 Endpoint: www.example.com/containers
 Data: {"name" : "ContainerName"}
-Return Data Sample: {"name" : "ContainerName" , "id" : "6ffa7213-7958-460c-b6f1-70d019b32356"}
 ```
 
 3) Get container by name
 ```
 Method: GET
 Endpoint: www.example.com/containers/{name}
-Return Data Sample: {"name" : "ContainerName" , "id" : "6ffa7213-7958-460c-b6f1-70d019b32356"}
 ```
 
+4) Get all blobs from container
+```
+Method: GET
+Endpoint: www.example.com/containers/{id}/blobs
+```
 
+5) Update container's name
+```
+Method: PUT
+Endpoint: www.example.com/containers/{id}
+Data: {"name" : "NewContainerName"}
+```
+
+6) Delete container
+```
+Method: DELETE
+Endpoint: www.example.com/containers/{id}
+```
