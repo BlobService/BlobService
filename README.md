@@ -21,6 +21,8 @@ Install-Package BlobService.MetaStore.EntityFrameworkCore
 Install-Package BlobService.Storage.FileSystem
 ```
 
+Add folowing code to your Startup.cs
+
 ```c#
 public class Startup
 {
@@ -43,7 +45,7 @@ public class Startup
     	// Add DB Context
         services.AddDbContext<AppBlobServiceDbContext>(opts =>
             {
-            	/ Example
+            	// Example
                 opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=BS;Trusted_Connection=True;MultipleActiveResultSets=true");
             });
     
