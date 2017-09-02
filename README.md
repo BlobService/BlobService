@@ -24,6 +24,16 @@ Install-Package BlobService.Storage.FileSystem
 Add folowing code to your Startup.cs
 
 ```c#
+//Usings
+
+using BlobService.Core.Configuration;
+using BlobService.MetaStore.EntityFrameworkCore;
+using BlobService.MetaStore.EntityFrameworkCore.Configuration;
+using BlobService.Storage.FileSystem;
+using BlobService.Storage.FileSystem.Configuration;
+```
+
+```c#
 public class Startup
 {
     public void ConfigureServices(IServiceCollection services)
@@ -43,7 +53,7 @@ public class Startup
     
     
     	// Add DB Context
-        services.AddDbContext<AppBlobServiceDbContext>(opts =>
+        services.AddDbContext<BlobServiceContext>(opts =>
             {
             	// Example
                 opts.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=BS;Trusted_Connection=True;MultipleActiveResultSets=true");
@@ -54,17 +64,14 @@ public class Startup
         {
         	opts.CorsPolicyName = "AllowAllOrigins";
             opts.MaxBlobSizeInMB = 100;
-        })
-        
-        // Registers EntityFramework stores for persisting blobs,containers metadata
-        .AddEfMetaStores<BlobServiceContext, ContainerMeta, BlobMeta>()
-        
+        })        
         // Registers FileSystem Storage Service for persisting files in filesystem in specified path
         .AddFileSystemStorageService<FileSystemStorageService>(opts =>
         {
+            // Make sure to give Write permission to IIS User
             opts.RootPath = @"C:\blobs";
         })
-        .AddEfMetaStores<AppBlobServiceDbContext>();
+        .AddEfMetaStores<BlobServiceContext>();
     }
 
     public void Configure(IApplicationBuilder app)
