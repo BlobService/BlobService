@@ -14,7 +14,7 @@ Full Documentation is available here.
 
 
 #### Sample Usage/Configuration.
-
+install folowing Nuget packages
 ```
 Install-Package BlobService.Core
 Install-Package BlobService.MetaStore.EntityFrameworkCore
