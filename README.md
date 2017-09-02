@@ -95,3 +95,29 @@ Update-Database
 ```
 
 ### Usage.
+
+#### Container Endpoints
+
+1) Get all containers
+```
+Method: GET
+Endpoint: www.example.com/containers
+Return Data Sample: [{"name" : "ContainerName" , "id" : "6ffa7213-7958-460c-b6f1-70d019b32356"}]
+```
+
+2) Add container
+```
+Method: POST
+Endpoint: www.example.com/containers
+Data: {"name" : "ContainerName"}
+Return Data Sample: {"name" : "ContainerName" , "id" : "6ffa7213-7958-460c-b6f1-70d019b32356"}
+```
+
+3) Get container by name
+```
+Method: GET
+Endpoint: www.example.com/containers/{name}
+Return Data Sample: {"name" : "ContainerName" , "id" : "6ffa7213-7958-460c-b6f1-70d019b32356"}
+```
+
+
