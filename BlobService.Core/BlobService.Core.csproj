@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Description>BlobService.Core library for hosting blobservice on-permise</Description>
     <Version>0.4.4</Version>
     <Copyright>Copyright Aram Kocharyan</Copyright>
