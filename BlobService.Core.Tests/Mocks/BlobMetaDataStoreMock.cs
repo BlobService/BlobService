@@ -22,6 +22,7 @@ namespace BlobService.Core.Tests.Mocks
 
         public async Task DeleteByKeyAsync(string blobId, string key)
         {
+            await Task.FromResult(0);
             //return await Task.FromResult(TestData.BlobMetaDataSeed.Where(x => x.BlobId == blobId && x.Key == key));
         }
 

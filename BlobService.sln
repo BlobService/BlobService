@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26228.9
+VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlobService.Core", "BlobService.Core\BlobService.Core.csproj", "{AADC019F-C3E3-4177-88B9-AD2A3D8811A1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobService.Core", "BlobService.Core\BlobService.Core.csproj", "{AADC019F-C3E3-4177-88B9-AD2A3D8811A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlobService.Core.Tests", "BlobService.Core.Tests\BlobService.Core.Tests.csproj", "{D56452C2-617D-4502-8A00-511912A37201}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlobService.Core.Tests", "BlobService.Core.Tests\BlobService.Core.Tests.csproj", "{D56452C2-617D-4502-8A00-511912A37201}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{55FBD544-8B6C-40CE-B469-27D956286907}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,5 +32,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {375518E2-D18F-447D-9B8F-F0C81D4F5FF2}
 	EndGlobalSection
 EndGlobal

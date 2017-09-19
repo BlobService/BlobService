@@ -3,6 +3,7 @@ using BlobService.Core.Models;
 using BlobService.Core.Tests.Mocks;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace BlobService.Core.Tests
@@ -10,6 +11,7 @@ namespace BlobService.Core.Tests
     public class BlobsControllerTests
     {
         private BlobsController _controller;
+
         public BlobsControllerTests()
         {
             _controller = new BlobsController(
@@ -45,6 +47,7 @@ namespace BlobService.Core.Tests
         [Fact]
         public async void DownloadBlobAsync_Ok()
         {
+            await Task.FromResult(0);
             //var result = await _controller.DownloadBlobAsync(TestData.BlobMetaSeed.First().Id);
             //var byteArray = await result.Content.ReadAsByteArrayAsync();
             //Assert.True(StructuralComparisons.StructuralEqualityComparer.Equals(TestData.FileSeed, byteArray));
