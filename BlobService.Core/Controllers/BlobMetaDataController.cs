@@ -36,7 +36,7 @@ namespace BlobService.Core.Controllers
         [HttpGet("/blobs/{id}/metadata")]
         public async Task<IActionResult> GetMetaDataAsync(string id)
         {
-            if (!string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
             {
                 return BadRequest();
             }
