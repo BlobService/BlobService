@@ -89,7 +89,7 @@ namespace BlobService.Core.Controllers
 
             var metaData = await _blobMetaDataStore.AddAsync(blobId, model);
 
-            return Ok(metaData);
+            return Ok(ModelMapper.ToViewModel(metaData));
         }
 
         [HttpPut("/blobs/{blobId}/metadata")]
