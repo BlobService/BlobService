@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>BlobService.Core library for hosting blobservice on-permise</Description>
-    <Version>0.4.5</Version>
+    <Version>0.4.6</Version>
     <Copyright>Copyright Aram Kocharyan</Copyright>
     <PackageProjectUrl>https://github.com/BlobService/BlobService</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/BlobService/BlobService/blob/master/LICENSE.md</PackageLicenseUrl>
@@ -14,8 +14,8 @@
     <Authors>BlobService</Authors>
     <PackageReleaseNotes>- Bugfixes
 - Added RequireAuthenticatedUser option</PackageReleaseNotes>
-    <AssemblyVersion>0.4.5.0</AssemblyVersion>
-    <FileVersion>0.4.5.0</FileVersion>
+    <AssemblyVersion>0.4.6.0</AssemblyVersion>
+    <FileVersion>0.4.6.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
