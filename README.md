@@ -16,14 +16,26 @@ Full Documentation is available here.
 ### Configuration.
 1) Create new ASP.NET Core project in you solution
 
-2) Install folowing Nuget packages
+2) Update WebConfig to enable DELETE and PUT method support
+
+```
+<system.webServer>
+    <modules>
+        <remove name="WebDAVModule" />
+    </modules>
+    <handlers>
+        <remove name="WebDAV" />
+    </handlers>
+```
+
+3) Install folowing Nuget packages
 ```
 Install-Package BlobService.Core
 Install-Package BlobService.MetaStore.EntityFrameworkCore
 Install-Package BlobService.Storage.FileSystem
 ```
 
-3) Add folowing code to your Startup.cs
+4) Add folowing code to your Startup.cs
 
 ```c#
 //Usings
@@ -83,13 +95,13 @@ public class Startup
     }
 }
 ```
-4) Execute folowing command in Console
+5) Execute folowing command in Console
 ```
 Add-Migrations
 ```
 and specify name for your migration
 
-5) And finally execute 
+6) And finally execute 
 ```
 Update-Database
 ```
