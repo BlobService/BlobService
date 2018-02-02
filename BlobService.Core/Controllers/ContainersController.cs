@@ -1,4 +1,5 @@
 ﻿using BlobService.Core.Models;
+using BlobService.Core.Services;
 using BlobService.Core.Stores;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,17 +15,20 @@ namespace BlobService.Core.Controllers
         protected readonly ILogger _logger;
         protected readonly IContainerStore _containerStore;
         protected readonly IBlobMetaDataStore _blobMetaDataStore;
+        protected readonly IStorageService _storageService;
 
         public ContainersController(
             BlobServiceOptions options,
             ILoggerFactory loggerFactory,
             IBlobMetaDataStore blobMetaDataStore,
-            IContainerStore containerStore)
+            IContainerStore containerStore,
+            IStorageService storageService)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _logger = loggerFactory?.CreateLogger<ContainersController>() ?? throw new ArgumentNullException(nameof(loggerFactory));
             _containerStore = containerStore ?? throw new ArgumentNullException(nameof(containerStore));
             _blobMetaDataStore = blobMetaDataStore ?? throw new ArgumentNullException(nameof(blobMetaDataStore));
+            _storageService = storageService ?? throw new ArgumentNullException(nameof(storageService));
         }
 
         [HttpGet("/containers")]
@@ -99,11 +103,11 @@ namespace BlobService.Core.Controllers
         {
             if (string.IsNullOrEmpty(id)) return NotFound();
 
-            var container = _containerStore.GetAsync(id);
-
+            var container = await _containerStore.GetAsync(id);
             if (container != null)
             {
                 await _containerStore.RemoveAsync(id);
+                await _storageService.DeleteContainerAsync(id);
             }
 
             return Ok();

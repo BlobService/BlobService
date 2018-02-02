@@ -8,7 +8,7 @@ namespace BlobService.Core.Services
     public interface IStorageService
     {
         /// <summary>
-        /// Gets the BLOB asynchronous.
+        /// Gets the BLOB asynchronously.
         /// </summary>
         /// <param name="containerId">The container identifier.</param>
         /// <param name="subject">The subject.</param>
@@ -16,7 +16,7 @@ namespace BlobService.Core.Services
         Task<byte[]> GetBlobAsync(string containerId, string subject);
 
         /// <summary>
-        /// Adds the BLOB asynchronous.
+        /// Adds the BLOB asynchronously.
         /// </summary>
         /// <param name="containerId">The container identifier.</param>
         /// <param name="blob">The BLOB.</param>
@@ -24,7 +24,7 @@ namespace BlobService.Core.Services
         Task<string> AddBlobAsync(string containerId, byte[] blob);
 
         /// <summary>
-        /// Updates the BLOB asynchronous.
+        /// Updates the BLOB asynchronously.
         /// </summary>
         /// <param name="containerId">The container identifier.</param>
         /// <param name="blob">The BLOB.</param>
@@ -32,11 +32,18 @@ namespace BlobService.Core.Services
         Task<string> UpdateBlobAsync(string containerId, string subject, byte[] blob);
 
         /// <summary>
-        /// Deletes the BLOB asynchronous.
+        /// Deletes the BLOB asynchronously.
         /// </summary>
         /// <param name="containerId">The container identifier.</param>
         /// <param name="subject">The subject.</param>
         /// <returns></returns>
         Task DeleteBlobAsync(string containerId, string subject);
+
+        /// <summary>
+        /// Deletes the container folder asynchronously.
+        /// </summary>
+        /// <param name="containerId"></param>
+        /// <returns></returns>
+        Task DeleteContainerAsync(string containerId);
     }
 }
