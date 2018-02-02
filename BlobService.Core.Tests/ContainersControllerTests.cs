@@ -17,7 +17,8 @@ namespace BlobService.Core.Tests
                 new BlobServiceOptions(),
                 new LoggerFactoryMock(),
                 new BlobMetaDataStoreMock(),
-                new ContainerStoreMock());
+                new ContainerStoreMock(),
+                new StorageServiceMock());
         }
 
         [Fact]

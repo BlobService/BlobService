@@ -15,6 +15,11 @@ namespace BlobService.Core.Tests.Mocks
             await Task.FromResult(0);
         }
 
+        public async Task DeleteContainerAsync(string containerId)
+        {
+            await Task.FromResult(0);
+        }
+
         public async Task<byte[]> GetBlobAsync(string containerId, string subject)
         {
             if(subject == TestData.Sotragesubject)
